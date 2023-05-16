@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:video_downloader_application/Controllers/home_controller.dart';
+import 'package:video_downloader_application/Repository/home_repository.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/Video_Model.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
@@ -15,7 +15,7 @@ import 'package:video_downloader_application/Utils/Utils.dart';
 
 class HomeProviderModel with ChangeNotifier{
 
-  final _myRepo = HomeController();
+  final _myRepo = HomeRepository();
 
 String _controllerValueChack = "";
 String get controllerValueChack => _controllerValueChack;

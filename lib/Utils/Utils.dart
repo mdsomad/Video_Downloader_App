@@ -3,7 +3,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
-import 'package:video_downloader_application/Colors/colors.dart';
+import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 
 
@@ -47,7 +47,7 @@ class Utils {
         duration: Duration(seconds: 3),
         borderRadius: BorderRadius.circular(10),
         flushbarPosition: FlushbarPosition.TOP,
-        icon: Icon(Icons.error,color: AppColors.white,),
+        icon: Icon(Icons.error,color: AppColor.white,),
       )..show(context)
       );
   }

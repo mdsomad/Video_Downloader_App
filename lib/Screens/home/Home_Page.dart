@@ -7,7 +7,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:video_downloader_application/Colors/colors.dart';
 import 'package:video_downloader_application/Components/Home_Page_Components.dart';
 import 'package:video_downloader_application/Data/response/status.dart';
 import 'package:video_downloader_application/Models/Video_Model.dart';
@@ -15,6 +14,8 @@ import 'package:video_downloader_application/Provider/FlutterDownloader_provider
 import 'package:video_downloader_application/Provider/home_provider.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
+import 'package:video_downloader_application/res/Colors/app_colors.dart';
+import 'package:video_downloader_application/res/assets/image_asset.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -81,21 +82,21 @@ void dispose() {
     final textTheme = Theme.of(context).textTheme;
       return Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: AppColors.bodyColor,
+        backgroundColor: AppColor.bodyColor,
         appBar: AppBar(
-          backgroundColor: AppColors.appBarColor,
+          backgroundColor: AppColor.appBarColor,
           elevation: 7,
           title: Container(
               // color: Colors.yellow,
               padding: EdgeInsets.only(bottom: 15),
-              child: Image.asset("Assets/AppIcons/Frame.png")),
+              child: Image.asset(ImageAssets.homePageAppBarMenuLogo)),
           // toolbarHeight: 30,
 
           actions: [
             Container(
                 // color: Colors.yellow,
                 padding: EdgeInsets.only(bottom: 15),
-                child: Image.asset("Assets/AppIcons/youtube_logo.png")),
+                child: Image.asset(ImageAssets.homePageAppBarYoutubeLogo)),
           ],
         ),
 

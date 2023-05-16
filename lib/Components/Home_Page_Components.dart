@@ -3,17 +3,16 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:video_downloader_application/Colors/colors.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/Video_Model.dart';
 import 'package:video_downloader_application/Provider/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Provider/home_provider.dart';
-import 'package:video_downloader_application/Screens/Download_Page.dart';
-import 'package:video_downloader_application/Screens/Download_Dio_Page.dart';
+import 'package:video_downloader_application/Screens/download/Download_Page.dart';
+import 'package:video_downloader_application/Screens/download/Download_Dio_Page.dart';
 import 'package:video_downloader_application/Video_DownladFiles/downloadload_file.dart';
 import 'package:video_downloader_application/Video_DownladFiles/file_list.dart';
 import 'package:video_downloader_application/Video_DownladFiles/testdownload.dart';
-
+import 'package:video_downloader_application/res/Colors/app_colors.dart';
 import '../Video_DownladFiles/Download_Page.dart';
 
 
@@ -33,7 +32,7 @@ Container Haider(TextEditingController controller,VoidCallback onPreass, VoidCal
 
   return Container(
     height: 140,
-    color: AppColors.appBarColor2,
+    color: AppColor.appBarColor2,
     
     child: Center(
       child: Padding(
@@ -87,7 +86,7 @@ Container Haider(TextEditingController controller,VoidCallback onPreass, VoidCal
             // suffixIcon: Icon(Icons.search,color: Colors.white,size: 30,),
 
             enabledBorder: OutlineInputBorder(
-               borderSide: BorderSide(width: 2, color: AppColors.white), //<-- SEE HERE
+               borderSide: BorderSide(width: 2, color: AppColor.white), //<-- SEE HERE
             ),
 
             focusedBorder: OutlineInputBorder(
@@ -171,9 +170,9 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
   // height: 500,
    width: MediaQuery.of(context).size.width / 1.1,
   decoration: BoxDecoration(
-     color: AppColors.cardColor,
+     color: AppColor.cardColor,
      borderRadius: BorderRadius.circular(10),
-     border: Border.all(color:AppColors.white,width: 1.5)
+     border: Border.all(color:AppColor.white,width: 1.5)
   ),
   child: Column(
     mainAxisAlignment: MainAxisAlignment.start,
@@ -186,7 +185,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
         child: Row(
           children: [
            const SizedBox(width: 20,),
-            Text("Video",style: TextStyle(color:AppColors.white,fontWeight: FontWeight.bold),),
+            Text("Video",style: TextStyle(color:AppColor.white,fontWeight: FontWeight.bold),),
           ],
         ),
       ),
@@ -211,8 +210,8 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(width: 10,),
-              Text(filterVideosList![index].quality.toString(),style:TextStyle(color:AppColors.white)),
-              Text(filterVideosList[index].fps.toString(),style:TextStyle(color:AppColors.white)),
+              Text(filterVideosList![index].quality.toString(),style:TextStyle(color:AppColor.white)),
+              Text(filterVideosList[index].fps.toString(),style:TextStyle(color:AppColor.white)),
               //* Text("1920 x 1080 (mp4,60fps)",style:TextStyle(color:AppColors.white)),
               Spacer(),
               Text(
@@ -220,7 +219,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                 formatBytes(int.parse(filterVideosList[index].contentLength ?? "00"),0),
                 //* "300mb",
               
-              style:TextStyle(color:AppColors.white)),
+              style:TextStyle(color:AppColor.white)),
 
                TextButton(onPressed: (){
               //  provider.downloadFile(filterVideosList![index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),false,context);
@@ -235,7 +234,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                       borderRadius:
                           BorderRadius.circular(100.0),
                     ))),
-                    child:Icon(Icons.download,color:provider.downloading ? Colors.blue : AppColors.downloadIcon,size:18 ,))
+                    child:Icon(Icons.download,color:provider.downloading ? Colors.blue : AppColor.downloadIcon,size:18 ,))
       
       
    
@@ -251,11 +250,11 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
        Container(
         width: double.infinity,
         height: 21,
-        color: AppColors.green,
+        color: AppColor.green,
         child: Row(
           children: [
            const SizedBox(width: 20,),
-            Text("AUDIO",style: TextStyle(color:AppColors.white,fontWeight: FontWeight.bold),),
+            Text("AUDIO",style: TextStyle(color:AppColor.white,fontWeight: FontWeight.bold),),
           ],
         ),
       ),
@@ -282,7 +281,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
             children: [
               SizedBox(width: 10,),
              
-              Text(videoList.data!.response!.audios![index].audioFormat.toString(),style:const TextStyle(color:AppColors.white)),
+              Text(videoList.data!.response!.audios![index].audioFormat.toString(),style:const TextStyle(color:AppColor.white)),
              
               Spacer(),
 
@@ -292,7 +291,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                 //! getFileSizeString(bytes:int.parse(videos[index].contentLength))
                 formatBytes(int.parse(videoList.data!.response!.audios![index].contentLength ?? "00"),0),
               
-              style:TextStyle(color:AppColors.white)),
+              style:TextStyle(color:AppColor.white)),
 
               TextButton(onPressed: (){
                 provider.downloadFile(videoList.data!.response!.audios![index].url.toString(),videoList.data!.response!.title.toString(),videoList.data!.response!.audios![index].quality.toString(),true,context);
@@ -306,7 +305,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                       borderRadius:
                           BorderRadius.circular(100.0),
                     ))),
-                child:Icon(Icons.download,color:AppColors.downloadIcon,size:18 ,))
+                child:Icon(Icons.download,color:AppColor.downloadIcon,size:18 ,))
           ],),
         );
         },),
@@ -365,7 +364,7 @@ String numberFormat(int n) {
           height: 80,
           width: 130,
           // margin: EdgeInsets.only(top: 30,left: 24,bottom: 25),
-          color:AppColors.bodyColor,
+          color:AppColor.bodyColor,
           child: Image.network(
             videoList.data!.response!.thumbnails![0].url.toString(),
             fit: BoxFit.cover,

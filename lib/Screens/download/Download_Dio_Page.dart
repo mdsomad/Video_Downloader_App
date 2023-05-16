@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
-import 'package:video_downloader_application/Colors/colors.dart';
 import 'package:video_downloader_application/Components/Download_Page_Componet.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/Video_Model.dart';
 import 'package:video_downloader_application/Provider/Download_Dio_provider.dart';
+import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 
 
@@ -49,9 +49,9 @@ class _DownloadPage2State extends State<DownloadPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bodyColor,
+      backgroundColor: AppColor.bodyColor,
         appBar: AppBar(
-          backgroundColor: AppColors.appBarColor,
+          backgroundColor: AppColor.appBarColor,
           elevation: 7,
           title: Container(
               // color: Colors.yellow,

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Provider/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Provider/Download_Dio_provider.dart';
 import 'package:video_downloader_application/Provider/home_provider.dart';
-import 'package:video_downloader_application/Screens/Home_Page.dart';
+import 'package:video_downloader_application/Screens/home/Home_Page.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
 import 'package:video_downloader_application/Screens/Main_Home_Page.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
