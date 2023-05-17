@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -8,24 +7,13 @@ import 'package:video_downloader_application/Models/Video_Model.dart';
 
 
 
+class VideoDownloadDisplayWidget extends StatelessWidget {
+  final dynamic provider;
+  final dynamic filterVideosList;
+  final ApiResponse<VideoModel> videoList;
+  final VoidCallback press;
+  VideoDownloadDisplayWidget({super.key, required this.provider, required this.filterVideosList, required this.videoList, required this.press});
 
-
-
-
-Widget videoText(BuildContext context){
-   return Container( 
-    height: 30,
-    width: MediaQuery.of(context).size.width,
-    color: Color(0xff00599A),
-    child: Center(child: Text("VIDEO",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
-   );
-}
-
-
-
-
-
-Widget videoDownloadShow(provider,filterVideosList,ApiResponse<VideoModel> videoList,VoidCallback press,BuildContext context){
 
    String formatBytes(int bytes, int decimals) {
     if (bytes == 00) return "(?) MB";
@@ -36,7 +24,9 @@ Widget videoDownloadShow(provider,filterVideosList,ApiResponse<VideoModel> video
   }
   
   
-   return Container( 
+  @override
+  Widget build(BuildContext context) {
+    return Container( 
     height: 100,
     width: MediaQuery.of(context).size.width,
     color: Colors.grey,
@@ -131,7 +121,9 @@ Widget videoDownloadShow(provider,filterVideosList,ApiResponse<VideoModel> video
       ],
     ),
    );
+  }
 }
+
 
 
 
@@ -154,15 +146,3 @@ Widget ProgressIndicator(progress,BuildContext context){
             ),
           );
 }
-
-
-
-Widget audioText(BuildContext context){
-   return Container( 
-    height: 28,
-    width: MediaQuery.of(context).size.width,
-    color: Color(0xff009A2B),
-    child: Center(child: Text("AUDIO",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.white),)),
-   );
-}
-

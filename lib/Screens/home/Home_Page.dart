@@ -7,15 +7,20 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:video_downloader_application/Components/Home_Page_Components.dart';
 import 'package:video_downloader_application/Data/response/status.dart';
 import 'package:video_downloader_application/Models/Video_Model.dart';
 import 'package:video_downloader_application/Provider/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Provider/home_provider.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
+import 'package:video_downloader_application/Screens/home/Widgets/card_body_widget.dart';
+import 'package:video_downloader_application/Screens/home/Widgets/input_search_widget.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 import 'package:video_downloader_application/res/assets/image_asset.dart';
+
+
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -27,60 +32,52 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController videoLinkController = TextEditingController();
 
+  int progress = 0;
+  ReceivePort receivePort = ReceivePort();
 
-int progress = 0;
-ReceivePort receivePort = ReceivePort();
-
-
-
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-      IsolateNameServer.registerPortWithName(receivePort.sendPort,'downloadingvideo');
-   
+    IsolateNameServer.registerPortWithName(
+        receivePort.sendPort, 'downloadingvideo');
+
     receivePort.listen((data) {
-            String id = data[0];
-           DownloadTaskStatus status = data[1];
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
 
-    setState(() {
-       progress = data[2];
+      setState(() {
+        progress = data[2];
+      });
+
+      if (status == DownloadTaskStatus.complete) {
+        print("Download complete");
+        Utils.toastMessage("Downloaded Complete", true);
+      }
+
+      Utils.toastMessage(progress.toString(), false);
+      print("progress Value this --> $progress");
     });
-     
 
-    if(status == DownloadTaskStatus.complete){
-      print("Download complete");
-      Utils.toastMessage("Downloaded Complete",true);
-    }
-    
-           Utils.toastMessage(progress.toString(),false);
-           print("progress Value this --> $progress");
-          
-    
-     });
-    
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
- static downloadCallback(id, status, progress){
-    final SendPort? receivePort = IsolateNameServer.lookupPortByName('downloadingvideo');
+  static downloadCallback(id, status, progress) {
+    final SendPort? receivePort =
+        IsolateNameServer.lookupPortByName('downloadingvideo');
     receivePort!.send([id, status, progress]);
-}
+  }
 
-
-
-@override
-void dispose() {
-  IsolateNameServer.removePortNameMapping('downloadingvideo');
-  super.dispose();
-}
-
-
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloadingvideo');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-      return Scaffold(
+    return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: AppColor.bodyColor,
         appBar: AppBar(
@@ -99,214 +96,135 @@ void dispose() {
                 child: Image.asset(ImageAssets.homePageAppBarYoutubeLogo)),
           ],
         ),
-
-
-
         body: SafeArea(
           child: SingleChildScrollView(
             child: Stack(
               children: [
-                Column( children: [
-                Consumer<HomeProviderModel>(          //* <-- Provider Use
-                builder: (context, provider, child) {
-                  return Haider(
-                          videoLinkController,
-                          () {
-                             if(videoLinkController.text.isEmpty){
-                                Utils.ftushBarErrorMessage("Please Enter A Youtube Link", context);
-                             }else{
-                                provider.fatchVideoListApi(videoLinkController.text);
-                                FocusScope.of(context).unfocus();
-                                // Provider.of<HomeProviderModel>(context,listen: false).fatchVideoListApi(videoLinkController.text);
-                             }
-                          },
-                          (){  
-                               videoLinkController.clear();
-                               provider.setcontrollerValueChack("");          
-                          },
-                                 provider.controllerValueChack,
-                          context
-                        );
-                })  ,   
-                 
-                
-                
-          const SizedBox(
-                  height: 40,
-          ),
+                Column(
+                  children: [
+                    Consumer<HomeProviderModel>(//* <-- Provider Use
+                        builder: (context, provider, child) {
+                      return InputSearchWidget(
+                        controller: videoLinkController,
+
+                        onClearPreass: () {
+                            videoLinkController.clear();
+                          provider.setcontrollerValueChack("");
+                        },
+
+                        controllerValueChack: provider.controllerValueChack,
 
 
-                Consumer<HomeProviderModel>(          //* <-- Provider Use
-                builder: (context, provider, child) {
-                  switch(provider.videoList.status){
-                  case Status.ISEMPTY:
-                      return Container(
-                                    height: MediaQuery.of(context).size.height / 2,
-                                    child:  Center(
-                                        child: Text(provider.videoList.nodata.toString(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold)
-                                            )
-                                       )
-                                  );
-                     
-                  case Status.LOADING:
-                   return Container(
-                                    height: MediaQuery.of(context).size.height / 2,
-                                    child:Center(
-                                        child: CircularProgressIndicator(color: Colors.green,)
-                                       )
-                                  );
-                   
-                   
-                  //  LoadingAnimation();
-                
-                  case Status.ERROR:
-                   return InkWell(
-                    onTap: (() {
-                      provider.fatchVideoListApi(videoLinkController.text);
-                     
+                        onPreass: () {
+
+                           if (videoLinkController.text.isEmpty) {
+                            Utils.ftushBarErrorMessage(
+                                "Please Enter A Youtube Link", context);
+                          } else {
+                            provider
+                                .fatchVideoListApi(videoLinkController.text);
+                            FocusScope.of(context).unfocus();
+                            // Provider.of<HomeProviderModel>(context,listen: false).fatchVideoListApi(videoLinkController.text);
+                          }
+                          
+                          
+                        },
+                      );
+
                     }),
-                    child: Container(
-                                    height: MediaQuery.of(context).size.height / 2,
-                                    width: MediaQuery.of(context).size.width / 1.2,
-                                    
-                                    child:  Center(
-                                        child:FittedBox(
+
+
+                    const SizedBox(
+                      height: 40,
+                    ),
+
+
+                    
+                    Consumer<HomeProviderModel>(//* <-- Provider Use
+                        builder: (context, provider, child) {
+                      switch (provider.videoList.status) {
+                        case Status.ISEMPTY:
+                          return Container(
+                              height: MediaQuery.of(context).size.height / 2,
+                              child: Center(
+                                  child: Text(
+                                      provider.videoList.nodata.toString(),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold))));
+
+                        case Status.LOADING:
+                          return Container(
+                              height: MediaQuery.of(context).size.height / 2,
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.green,
+                              )));
+
+                        //  LoadingAnimation();
+
+                        case Status.ERROR:
+                          return InkWell(
+                              onTap: (() {
+                                provider.fatchVideoListApi(
+                                    videoLinkController.text);
+                              }),
+                              child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height / 2,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.2,
+                                  child: Center(
+                                      child: FittedBox(
                                           fit: BoxFit.scaleDown,
                                           alignment: Alignment.center,
-                                          child:Text(provider.videoList.message.toString(),
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold)
-                                            )
+                                          child: Text(
+                                              provider.videoList.message
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 25,
+                                                  fontWeight:
+                                                      FontWeight.bold))))));
 
-                                        )
+                        case Status.COMPLETED:
+                          return Stack(
+                            children: [
+                              //  Text('${provider.videoList.data?.response?.title.toString()}')
+                              CardBodyWidget(videoList: provider.videoList, provider: provider,)
+                            ],
+                          );
 
-
-
-                                       )
-                                  ));
-                
-                  case Status.COMPLETED:
-                  
-                   return Stack(
-                    children: [
-                          //  Text('${provider.videoList.data?.response?.title.toString()}')
-                      CardBody(provider.videoList,provider,context)
-                      
-                    ],
-                   );
-                   
-                   
-                
-                 default:
-                   return Text("NO Data");
-                  
-                }
+                        default:
+                          return Text("NO Data");
+                      }
+                    }),
+                  ],
+                ),
+                Consumer<HomeProviderModel>(//* <-- Provider Use
+                    builder: (context, provider, child) {
+                  return provider.isDataLoaded
+                      ? Positioned(
+                          top: 170,
+                          left: 45,
+                          child: const Text(
+                            "DOWNLOAD",
+                            style: TextStyle(
+                                fontSize: 21,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ))
+                      : SizedBox();
                 }),
-                
-                     
-            ],
-          ),
-
-
-
-
-
-
-
- 
-       Consumer<HomeProviderModel>(                        //* <-- Provider Use
-        builder: (context, provider, child) {
-                  return provider.isDataLoaded ? Positioned(
-                        top: 170,
-                        left: 45,
-                        child: const Text(
-                          "DOWNLOAD",
-                          style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        )):SizedBox();
-
-                }),
-
-      
-
-                
               ],
             ),
           ),
-        )
-        
-        
-      
-
-
-
-
-      );
-
-
-
+        ));
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- //! currently Not Use
+//! currently Not Use
 
 // class oldHomePage extends StatefulWidget {
 //   const oldHomePage({Key? key}) : super(key: key);
@@ -317,11 +235,6 @@ void dispose() {
 
 // class _oldHomePageState extends State<oldHomePage> {
 //   TextEditingController videoLinkController = TextEditingController();
-
- 
-
-
-
 
 //   @override
 //   void dispose() {
@@ -368,14 +281,14 @@ void dispose() {
 //                         provider.fatchVideoListApi(videoLinkController.text);
 //                      }
 //                   },
-//                   (){  
+//                   (){
 //                        videoLinkController.clear();
-//                        provider.setcontrollerValueChack("");          
+//                        provider.setcontrollerValueChack("");
 //                   },
 //                   provider.controllerValueChack,
 //                   context
 //                 ),
-               
+
 //                 SizedBox(
 //                   height: 40,
 //                 ),
@@ -395,11 +308,6 @@ void dispose() {
 
 //                 //  provider.videoList.length > 0 ? CardBody(provider.videoList,context) : SingleChildScrollView()
 
-
-
-
-
-
 //                 provider.loading ? LoadingAnimation()  : provider.videoList.length > 0
 
 //                         ? CardBody(provider.videoList, context)
@@ -416,24 +324,10 @@ void dispose() {
 //                                )
 //                           )
 
-
-
-
-
-
-
-
-
-
 //                 //  provider.loading ? Container(
 //                 //   height: MediaQuery.of(context).size.height /2,
 //                 //   // color: Colors.pink,
 //                 //   child: Center(child: CircularProgressIndicator(color:Colors.green,))): provider.videoList.length > 0 ? provider.loading ? Center(child: CircularProgressIndicator()) : CardBody(provider.videoList,context) : SizedBox()
-
-
-
-
-
 
 //               ],
 //             ),
@@ -451,25 +345,15 @@ void dispose() {
 //                               fontWeight: FontWeight.bold),
 //                         ))
 
-
 //                 : const SizedBox(),
 
-
-
-
 //           ]),
-
 
 //         )
 
 //       ),
 
-
-
-
-
 //       );
-
 
 //     });
 //   }
@@ -553,10 +437,3 @@ void dispose() {
 // //      );
 // //   }
 // // }
-
-
-
-
-
-
-

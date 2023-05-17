@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
-import 'package:video_downloader_application/Components/Download_Page_Componet.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/Video_Model.dart';
 import 'package:video_downloader_application/Provider/Download_Dio_provider.dart';
+import 'package:video_downloader_application/Screens/download/Widgets/videoText_widget.dart';
+import 'package:video_downloader_application/Screens/download/Widgets/video_download_display_widget.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 
@@ -68,14 +69,15 @@ class _DownloadPage2State extends State<DownloadPage2> {
         provider.isPermission ? Center(
           child: Column(
             children: [
-              videoText(context),
-              videoDownloadShow(provider,widget.filterVideosList,widget.videoList,
-              (){
+              VideoTextWidget(),
+
+              VideoDownloadDisplayWidget(provider: provider,filterVideosList: widget.filterVideosList, videoList: widget.videoList, press: () { 
+
                  provider.fileExist && provider.downloading == false 
                  ? provider.openfile()
                  : provider.startDownloading(widget.filterVideosList,widget.videoList,context);
-                 
-              },
+                
+               },),
             
               
               
@@ -83,7 +85,7 @@ class _DownloadPage2State extends State<DownloadPage2> {
         
               
               
-              context),
+              // context),
               // audioText(context),
              
               // Text("Downlad Screen",style:TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color:AppColors.white)),
