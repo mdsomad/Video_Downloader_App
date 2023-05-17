@@ -42,8 +42,8 @@ class _InternetEexceptionWidgetState extends State<InternetEexceptionWidget> {
             padding: const EdgeInsets.only(top: 30),
             child: Center(
                 child: Text(
-              'internet_exception',
-              textAlign: TextAlign.center,
+              'Were unable tp show results.\nPtease check your\n internet conenction.',
+              textAlign: TextAlign.center,style: TextStyle(color: Colors.white),
             )),
           ),
 

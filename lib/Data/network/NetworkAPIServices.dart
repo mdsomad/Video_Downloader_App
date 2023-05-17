@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:video_downloader_application/Data/app_expositions.dart';
 import 'package:video_downloader_application/Data/network/BaseApiServices.dart';
-import 'package:video_downloader_application/Models/Error_Model.dart';
+import 'package:video_downloader_application/Models/error/Error_Model.dart';
 
 class NetworkApiServices extends BaseAPIServices{   //* NetworkApiServices class Link this BaseAPIServices class
 

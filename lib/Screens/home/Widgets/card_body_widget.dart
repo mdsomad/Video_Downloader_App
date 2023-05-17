@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
-import 'package:video_downloader_application/Models/Video_Model.dart';
+import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 import 'package:video_downloader_application/Screens/download/Download_Dio_Page.dart';
 import 'package:video_downloader_application/Screens/home/Widgets/video_thumbnail.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
@@ -59,7 +59,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
     
     return Container(
   // height: 500,
-   width: MediaQuery.of(context).size.width / 1.1,
+   width: MediaQuery.of(context).size.width *.9,
   decoration: BoxDecoration(
      color: AppColor.cardColor,
      borderRadius: BorderRadius.circular(10),

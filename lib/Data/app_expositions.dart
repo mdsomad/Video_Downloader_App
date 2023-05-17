@@ -1,5 +1,5 @@
 
-import 'package:video_downloader_application/Models/Error_Model.dart';
+import 'package:video_downloader_application/Models/error/Error_Model.dart';
 
 class AppException implements Exception{
   final _message;
@@ -17,7 +17,7 @@ class AppException implements Exception{
 
 class FetchDataException extends AppException{
   
-  FetchDataException([String? message]):super (message, 'Error During Communication ');
+  FetchDataException([String? message]):super (message, '');
   
 }
 

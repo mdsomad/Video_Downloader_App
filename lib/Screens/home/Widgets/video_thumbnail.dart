@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
-import 'package:video_downloader_application/Models/Video_Model.dart';
+import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 

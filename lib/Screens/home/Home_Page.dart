@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/status.dart';
-import 'package:video_downloader_application/Models/Video_Model.dart';
+import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 import 'package:video_downloader_application/Provider/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Provider/home_provider.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
@@ -16,11 +16,8 @@ import 'package:video_downloader_application/Screens/home/Widgets/card_body_widg
 import 'package:video_downloader_application/Screens/home/Widgets/input_search_widget.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
+import 'package:video_downloader_application/res/Components/internet_exceptions_widget.dart';
 import 'package:video_downloader_application/res/assets/image_asset.dart';
-
-
-
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -106,18 +103,13 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, provider, child) {
                       return InputSearchWidget(
                         controller: videoLinkController,
-
                         onClearPreass: () {
-                            videoLinkController.clear();
+                          videoLinkController.clear();
                           provider.setcontrollerValueChack("");
                         },
-
                         controllerValueChack: provider.controllerValueChack,
-
-
                         onPreass: () {
-
-                           if (videoLinkController.text.isEmpty) {
+                          if (videoLinkController.text.isEmpty) {
                             Utils.ftushBarErrorMessage(
                                 "Please Enter A Youtube Link", context);
                           } else {
@@ -126,20 +118,12 @@ class _HomePageState extends State<HomePage> {
                             FocusScope.of(context).unfocus();
                             // Provider.of<HomeProviderModel>(context,listen: false).fatchVideoListApi(videoLinkController.text);
                           }
-                          
-                          
                         },
                       );
-
                     }),
-
-
                     const SizedBox(
                       height: 40,
                     ),
-
-
-                    
                     Consumer<HomeProviderModel>(//* <-- Provider Use
                         builder: (context, provider, child) {
                       switch (provider.videoList.status) {
@@ -165,34 +149,45 @@ class _HomePageState extends State<HomePage> {
                         //  LoadingAnimation();
 
                         case Status.ERROR:
-                          return InkWell(
-                              onTap: (() {
-                                provider.fatchVideoListApi(
-                                    videoLinkController.text);
-                              }),
-                              child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 2,
-                                  width:
-                                      MediaQuery.of(context).size.width / 1.2,
-                                  child: Center(
-                                      child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                              provider.videoList.message
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 25,
-                                                  fontWeight:
-                                                      FontWeight.bold))))));
+                          if (provider.videoList.message.toString() ==
+                              "No Internet Conncetion") {
+                            return InternetEexceptionWidget(onPress: () {
+                              provider
+                                  .fatchVideoListApi(videoLinkController.text);
+                            });
+                          } else {
+                            return InkWell(
+                                onTap: (() {
+                                  provider.fatchVideoListApi(
+                                      videoLinkController.text);
+                                }),
+                                child: Container(
+                                    height:
+                                        MediaQuery.of(context).size.height / 2,
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.2,
+                                    child: Center(
+                                        child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                                provider.videoList.message
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 25,
+                                                    fontWeight:
+                                                        FontWeight.bold))))));
+                          }
 
                         case Status.COMPLETED:
                           return Stack(
                             children: [
                               //  Text('${provider.videoList.data?.response?.title.toString()}')
-                              CardBodyWidget(videoList: provider.videoList, provider: provider,)
+                              CardBodyWidget(
+                                videoList: provider.videoList,
+                                provider: provider,
+                              )
                             ],
                           );
 
@@ -202,6 +197,9 @@ class _HomePageState extends State<HomePage> {
                     }),
                   ],
                 ),
+
+
+                
                 Consumer<HomeProviderModel>(//* <-- Provider Use
                     builder: (context, provider, child) {
                   return provider.isDataLoaded

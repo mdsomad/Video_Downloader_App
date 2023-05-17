@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_downloader_application/Repository/home_repository.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
-import 'package:video_downloader_application/Models/Video_Model.dart';
+import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
 
 

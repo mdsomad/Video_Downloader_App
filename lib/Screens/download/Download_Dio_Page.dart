@@ -5,7 +5,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
-import 'package:video_downloader_application/Models/Video_Model.dart';
+import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 import 'package:video_downloader_application/Provider/Download_Dio_provider.dart';
 import 'package:video_downloader_application/Screens/download/Widgets/videoText_widget.dart';
 import 'package:video_downloader_application/Screens/download/Widgets/video_download_display_widget.dart';

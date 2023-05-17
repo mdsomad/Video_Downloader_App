@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
-import 'package:video_downloader_application/Models/Video_Model.dart';
+import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 import 'package:video_downloader_application/Video_DownladFiles/check_permission.dart';
 import 'package:video_downloader_application/Video_DownladFiles/directory_path.dart';
 

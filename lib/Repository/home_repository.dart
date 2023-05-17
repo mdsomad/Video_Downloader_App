@@ -1,7 +1,7 @@
 import 'package:video_downloader_application/API_Url/api_url.dart';
 import 'package:video_downloader_application/Data/network/BaseApiServices.dart';
 import 'package:video_downloader_application/Data/network/NetworkAPIServices.dart';
-import 'package:video_downloader_application/Models/Video_Model.dart';
+import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 import 'package:video_downloader_application/res/App_url/app_url.dart';
 
 
