@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:video_downloader_application/Data/app_expositions.dart';
@@ -34,24 +35,79 @@ class NetworkApiServices extends BaseAPIServices{   //* NetworkApiServices class
 
 
 
-
-  @override 
-  Future getPostApiRespons(String url,dynamic data)async {      //* <-- getPostApiRespons function call
+  
+  @override
+  Future getPostApiRespons(String url, var data) async {
     // TODO: implement getPostApiRespons
-    
-   dynamic responseJson;
-    try {
-     Response response = await post(
-      Uri.parse(url),
-      body: data
+   
 
-     ).timeout(Duration(seconds: 10));
-      responseJson = returnResponse(response);    //* <-- returnResponse Finction call
-    } on SocketException {
+     if(kDebugMode){
+      print("This Url --> $url");
+      print("This Data --> $data");
+     
+    }
+    
+    
+    dynamic responseJson;
+    try {
+       final response = await http.post(Uri.parse(url),
+             headers: {
+              //  'Content-Type': 'application/json',
+                "Accept": "application/json",
+              },
+          // body: jsonEncode(data)    //* <-- Agar row form mein Data Hai To Aise Hi bhejna hai
+           body:data              //* <-- Agar from-data hai to Aise Hi bhejna hai  
+                
+       ).timeout( const Duration(seconds: 60));
+
+       responseJson = returnResponse(response); //* <-- Call this returnResponse  Function
+
+    } on SocketException{
       throw FetchDataException('No Internet Conncetion');
     }
+    
+    if(kDebugMode){
+      print(responseJson);
+    }
     return responseJson;
+   
+   
+   
+   
+   
   }
+
+
+
+
+
+
+
+  // @override 
+  // Future getPostApiRespons(String url,dynamic data)async {      //* <-- getPostApiRespons function call
+  //   // TODO: implement getPostApiRespons
+  //   print("This Url --> $data");
+  //  dynamic responseJson;
+  //   try {
+
+  //         Map newData = {                                                //* <-- Agar from-data hai to Aise Hi bhejna hai                     
+  //            "url" : data
+  //          };
+      
+      
+  //    Response response = await post(Uri.parse(url),body: jsonEncode(newData)).timeout(Duration(seconds: 60));
+  //     responseJson = returnResponse(response);    //* <-- returnResponse Finction call
+  //   } on SocketException {
+  //     throw FetchDataException('No Internet Conncetion');
+  //   }
+  //   return responseJson;
+  // }
+
+
+
+
+
+  
 
 
 
@@ -86,6 +142,7 @@ dynamic returnResponse (http.Response response){
   
   
 }
+
 
 
   

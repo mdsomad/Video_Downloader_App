@@ -9,7 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 
-import 'package:video_downloader_application/Provider/FlutterDownloader_provider.dart';
+import 'package:video_downloader_application/Provider/download/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Video_DownladFiles/directory_path.dart';
 
 class DoenloadloadFile extends StatefulWidget {

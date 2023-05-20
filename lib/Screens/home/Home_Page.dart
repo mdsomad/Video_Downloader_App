@@ -9,11 +9,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/status.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
-import 'package:video_downloader_application/Provider/FlutterDownloader_provider.dart';
-import 'package:video_downloader_application/Provider/home_provider.dart';
+import 'package:video_downloader_application/Provider/download/FlutterDownloader_provider.dart';
+import 'package:video_downloader_application/Provider/home/home_provider.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
-import 'package:video_downloader_application/Screens/home/Widgets/card_body_widget.dart';
-import 'package:video_downloader_application/Screens/home/Widgets/input_search_widget.dart';
+import 'package:video_downloader_application/Screens/home/Instgaram_Ui_Widgets/instgaram_card_body_widget.dart';
+import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/card_body_widget.dart';
+import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/input_search_widget.dart';
+import 'package:video_downloader_application/Screens/home/home_Error_Widgets/home_status_error_widget.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 import 'package:video_downloader_application/res/Components/internet_exceptions_widget.dart';
@@ -113,26 +115,41 @@ class _HomePageState extends State<HomePage> {
                             Utils.ftushBarErrorMessage(
                                 "Please Enter A Youtube Link", context);
                           } else {
-                            provider
-                                .fatchVideoListApi(videoLinkController.text);
+                            provider.checkVideoPlatformThenApiCall(
+                                videoLinkController.text.toString().trim());
                             FocusScope.of(context).unfocus();
-                            // Provider.of<HomeProviderModel>(context,listen: false).fatchVideoListApi(videoLinkController.text);
+                            //! Provider.of<HomeProviderModel>(context,listen: false).fatchVideoListApi(videoLinkController.text);
                           }
                         },
                       );
                     }),
+
+
+
                     const SizedBox(
                       height: 40,
                     ),
-                    Consumer<HomeProviderModel>(//* <-- Provider Use
-                        builder: (context, provider, child) {
-                      switch (provider.videoList.status) {
+
+
+
+
+                     //* <-- Provider Use
+                    Consumer<HomeProviderModel>(builder: (context, provider, child) {
+
+                      var data;
+                      if (provider.checkVideoPlatformLink == "instagram") {
+                        data = provider.instagramVideo;
+                      } else {
+                        data = provider.videoList;
+                      }
+
+                      switch (data.status) {
+
                         case Status.ISEMPTY:
                           return Container(
                               height: MediaQuery.of(context).size.height / 2,
                               child: Center(
-                                  child: Text(
-                                      provider.videoList.nodata.toString(),
+                                  child: Text(data.nodata.toString(),
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 25,
@@ -146,50 +163,29 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.green,
                               )));
 
-                        //  LoadingAnimation();
+                        // ! LoadingAnimation();
 
                         case Status.ERROR:
-                          if (provider.videoList.message.toString() ==
-                              "No Internet Conncetion") {
-                            return InternetEexceptionWidget(onPress: () {
-                              provider
-                                  .fatchVideoListApi(videoLinkController.text);
-                            });
-                          } else {
-                            return InkWell(
-                                onTap: (() {
-                                  provider.fatchVideoListApi(
-                                      videoLinkController.text);
-                                }),
-                                child: Container(
-                                    height:
-                                        MediaQuery.of(context).size.height / 2,
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.2,
-                                    child: Center(
-                                        child: FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                                provider.videoList.message
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 25,
-                                                    fontWeight:
-                                                        FontWeight.bold))))));
-                          }
+
+                          return HomeStatusErrorWidget(errorData: data, provider: provider, videoLinkController: videoLinkController,);
 
                         case Status.COMPLETED:
-                          return Stack(
-                            children: [
-                              //  Text('${provider.videoList.data?.response?.title.toString()}')
-                              CardBodyWidget(
-                                videoList: provider.videoList,
-                                provider: provider,
-                              )
-                            ],
-                          );
+
+                          if (provider.checkVideoPlatformLink == "instagram") {
+                            return InstagramCardBodyWidget(
+                              videoList: provider.instagramVideo,
+                              provider: provider,
+                            );
+
+                          } else {
+
+                            return CardBodyWidget(
+                              videoList: provider.videoList,
+                              provider: provider,
+                            );
+
+                            
+                          }
 
                         default:
                           return Text("NO Data");
@@ -199,10 +195,13 @@ class _HomePageState extends State<HomePage> {
                 ),
 
 
-                
+
+
+
+
                 Consumer<HomeProviderModel>(//* <-- Provider Use
                     builder: (context, provider, child) {
-                  return provider.isDataLoaded
+                     return provider.isDataLoaded
                       ? Positioned(
                           top: 170,
                           left: 45,

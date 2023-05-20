@@ -32,8 +32,8 @@ class _InternetEexceptionWidgetState extends State<InternetEexceptionWidget> {
 
 
           Icon(
-            Icons.cloud_off,
-             color: AppColor.redColor,
+            Icons.signal_wifi_connected_no_internet_4,
+             color: AppColor.redColor.withOpacity(.8),
             size: 50,
           ),
 
@@ -42,14 +42,14 @@ class _InternetEexceptionWidgetState extends State<InternetEexceptionWidget> {
             padding: const EdgeInsets.only(top: 30),
             child: Center(
                 child: Text(
-              'Were unable tp show results.\nPtease check your\n internet conenction.',
-              textAlign: TextAlign.center,style: TextStyle(color: Colors.white),
+              'Were unable tp show results.\n Ptease check your\n internet conenction.',
+              textAlign: TextAlign.center,style: TextStyle(color: AppColor.white, fontSize: 18,fontWeight: FontWeight.bold),
             )),
           ),
 
 
           SizedBox(
-            height: height * .15,
+            height: height * .12,
           ),
 
 
@@ -68,7 +68,7 @@ class _InternetEexceptionWidgetState extends State<InternetEexceptionWidget> {
                   style: Theme.of(context)
                     .textTheme
                     .titleMedium!
-                    .copyWith(color: Colors.white),
+                    .copyWith(color: Colors.black),
               )),
             ),
           )

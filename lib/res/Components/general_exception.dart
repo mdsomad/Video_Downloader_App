@@ -47,8 +47,10 @@ class _GeneralEexceptionWidgetState extends State<GeneralEexceptionWidget> {
             padding: const EdgeInsets.only(top: 30),
             child: Center(
                 child: Text(
-              'general_exception',
-              textAlign: TextAlign.center,
+               'We re unable to process your request.\n Please try again',
+               textAlign: TextAlign.center,
+               style: TextStyle(fontSize: 18,color: AppColor.white,fontWeight: FontWeight.bold),
+
             )),
           ),
 
@@ -71,7 +73,7 @@ class _GeneralEexceptionWidgetState extends State<GeneralEexceptionWidget> {
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
-                    .copyWith(color: Colors.white),
+                    .copyWith(color: AppColor.black),
               )),
             ),
           )

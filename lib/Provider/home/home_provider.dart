@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:video_downloader_application/Data/response/status.dart';
+import 'package:video_downloader_application/Models/Instagram_reel/instagram_reel_model.dart';
 import 'package:video_downloader_application/Repository/home_repository.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
@@ -43,42 +45,88 @@ setcontrollerValueChack(String value){
 
 
 
+  String _checkVideoPlatformLink = "";
+  String get checkVideoPlatformLink => _checkVideoPlatformLink;
+
+
+
+  //TODO Create  setLoading function
+  setCheckVideoPlatformLink(String value){
+    _checkVideoPlatformLink = value;
+    notifyListeners();
+  }
 
 
 
 
 
 
-//  List<VideoModel> _videoList = [];
-//  List<VideoModel> get videoList => _videoList;
-//    setVideo (VideoModel value){       //* <-- Yah hai loading ka function
-//      if(_videoList.isNotEmpty){
-//         _videoList.clear();
-//      }
-//      _videoList.add(value);
-    
-//      print(value.title);
-//      notifyListeners();
-//   }
 
-ApiResponse<VideoModel> videoList = ApiResponse.isEmpty("Enter A Youtube Video Link");
+ApiResponse<VideoModel> videoList = ApiResponse.isEmpty("Enter A Video Link");
 
   setMoviesList(ApiResponse<VideoModel>response){
     videoList = response;
     notifyListeners();
   }
 
+
+
+ApiResponse<InstagramReelModel> instagramVideo = ApiResponse.isEmpty("Enter A Video Link");
+
+  setinstagramVideo(ApiResponse<InstagramReelModel>response){
+    instagramVideo = response;
+    notifyListeners();
+  }
+
+
+
+
+
+
+
+
+ //TODO Create checkvideoplatform function  (Them Api call)
+ void checkVideoPlatformThenApiCall(String PassVideoUrl){
+   if(PassVideoUrl.contains("https://www.instagram.com")){
+        if(kDebugMode){
+          print("This is a instagram Url");
+        }
+       setCheckVideoPlatformLink("instagram");
+       instagramApi(PassVideoUrl);
+   }else if(PassVideoUrl.contains("https://www.facebook.com")){
+       if(kDebugMode){
+          print("This is a facebook Url");
+        }
+        setCheckVideoPlatformLink("facebook");
+   }else{
+         if(kDebugMode){
+          print("This is a Youtube Url");
+        }
+       setCheckVideoPlatformLink("youtube");
+       youtubeApi(PassVideoUrl);
+   }
+ }
+
   
   
-  Future<void> fatchVideoListApi (var PassVideoUrl)async{
+  
+
+
+
+
+
+  //TODO Create youtubeApi function
+  Future<void> youtubeApi (var PassVideoUrl)async{
+
+  
 
       setMoviesList(ApiResponse.loading());
        setDataLoaded(false);
        print('data loading');
        
        _myRepo.fetchVideoLinkList(PassVideoUrl).then((value){
-        // setVideo(value);
-        print(value.status.toString());
+
+
         if(value.status.toString() == "FAILED"){
            setMoviesList(ApiResponse.error("Request Failed, Please Try Again"));
            setDataLoaded(false);
@@ -89,12 +137,65 @@ ApiResponse<VideoModel> videoList = ApiResponse.isEmpty("Enter A Youtube Video L
 
          notifyListeners();
         if(kDebugMode){
+          print('Youtube Data this Channe Name --> ${value.response!.channelName}');
           print('Data this --> $value');
         }
 
     }).onError((error, stackTrace){
 
        setMoviesList(ApiResponse.error(error.toString()));
+       setDataLoaded(false);
+        if(kDebugMode){
+
+          print("Error This --> ${error.toString()}");
+        }
+
+    });
+
+
+    if(kDebugMode){
+      print('End Run');
+    }
+    
+  }
+
+
+
+
+
+
+
+
+  //TODO Create instagramApi function
+  Future<void> instagramApi (var PassVideoUrl)async{
+
+      setinstagramVideo(ApiResponse.loading());
+
+      setDataLoaded(false);
+
+        print('data loading');
+       
+       _myRepo.instagramApi(PassVideoUrl).then((value){
+        
+        print(value.status.toString());
+        if(value.status.toString() == "FAILED"){
+           setinstagramVideo(ApiResponse.error("Request Failed, Please Try Again"));
+           setDataLoaded(false);
+        }else{
+           setinstagramVideo(ApiResponse.completed(value));
+           setDataLoaded(true);
+        }
+
+         notifyListeners();
+
+        if(kDebugMode){
+          print('Instagram Data this User name --> ${value.response.author.name}');
+          print('Data this --> $value');
+        }
+
+    }).onError((error, stackTrace){
+
+       setinstagramVideo(ApiResponse.error(error.toString()));
        setDataLoaded(false);
         if(kDebugMode){
           print("Error This --> ${error.toString()}");
