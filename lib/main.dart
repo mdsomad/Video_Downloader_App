@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Provider/download/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Provider/download/Download_Dio_provider.dart';
 import 'package:video_downloader_application/Provider/home/home_provider.dart';
+import 'package:video_downloader_application/Provider/main_home_page_provider.dart/MainHomePage_Provider.dart';
 import 'package:video_downloader_application/Screens/home/Home_Page.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
 import 'package:video_downloader_application/Screens/Main_Home_Page.dart';
@@ -36,6 +37,10 @@ class MyApp extends StatelessWidget {
             
              ChangeNotifierProvider<FlutterDownloaderProvider>(
               create:(context)=>FlutterDownloaderProvider()
+            ),
+            
+             ChangeNotifierProvider<MainHomePageProvider>(
+              create:(context)=>MainHomePageProvider()
             ),
             
     ],

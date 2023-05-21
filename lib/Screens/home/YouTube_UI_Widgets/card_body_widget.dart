@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
+import 'package:video_downloader_application/Provider/download/Download_Dio_provider.dart';
+import 'package:video_downloader_application/Provider/main_home_page_provider.dart/MainHomePage_Provider.dart';
 import 'package:video_downloader_application/Screens/download/Download_Dio_Page.dart';
 import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/video_thumbnail.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
@@ -85,6 +88,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
         // height: 150,
         
         child: ListView.builder(
+           physics: ClampingScrollPhysics(),
           itemCount:filterVideosList.length,
           shrinkWrap: true,
           itemBuilder:(context, index) {
@@ -113,9 +117,9 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
               style:TextStyle(color:AppColor.white)),
 
                TextButton(onPressed: (){
-              //  provider.downloadFile(filterVideosList![index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),false,context);
-              Navigator.push(context, MaterialPageRoute(builder: ((context) => DownloadPage2(filterVideosList:filterVideosList![index],videoList:videoList,))));
-
+                provider.downloadFile(filterVideosList![index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),false,context);
+              // Navigator.push(context, MaterialPageRoute(builder: ((context) => DownloadPage2(filterVideosList:filterVideosList![index],videoList:videoList,))));
+              
               }, 
               style: ButtonStyle(overlayColor:
                     MaterialStateColor.resolveWith((states) =>Colors.white.withOpacity(0.1)),
@@ -154,6 +158,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
         // height: 150,
         
         child: ListView.builder(
+          physics: ClampingScrollPhysics(),
           itemCount:videoList.data!.response!.audios!.length,
           //  shrinkWrap: true,
           shrinkWrap: true,
@@ -185,6 +190,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
               style:TextStyle(color:AppColor.white)),
 
               TextButton(onPressed: (){
+                // ! Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                 provider.downloadFile(videoList.data!.response!.audios![index].url.toString(),videoList.data!.response!.title.toString(),videoList.data!.response!.audios![index].quality.toString(),true,context);
 
               }, 

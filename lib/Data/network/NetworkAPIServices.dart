@@ -52,11 +52,11 @@ class NetworkApiServices extends BaseAPIServices{   //* NetworkApiServices class
     try {
        final response = await http.post(Uri.parse(url),
              headers: {
-              //  'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 "Accept": "application/json",
               },
-          // body: jsonEncode(data)    //* <-- Agar row form mein Data Hai To Aise Hi bhejna hai
-           body:data              //* <-- Agar from-data hai to Aise Hi bhejna hai  
+          body: jsonEncode(data)    //* <-- Agar row form mein Data Hai To Aise Hi bhejna hai
+          //  body:data              //* <-- Agar from-data hai to Aise Hi bhejna hai  
                 
        ).timeout( const Duration(seconds: 60));
 
@@ -81,27 +81,6 @@ class NetworkApiServices extends BaseAPIServices{   //* NetworkApiServices class
 
 
 
-
-
-  // @override 
-  // Future getPostApiRespons(String url,dynamic data)async {      //* <-- getPostApiRespons function call
-  //   // TODO: implement getPostApiRespons
-  //   print("This Url --> $data");
-  //  dynamic responseJson;
-  //   try {
-
-  //         Map newData = {                                                //* <-- Agar from-data hai to Aise Hi bhejna hai                     
-  //            "url" : data
-  //          };
-      
-      
-  //    Response response = await post(Uri.parse(url),body: jsonEncode(newData)).timeout(Duration(seconds: 60));
-  //     responseJson = returnResponse(response);    //* <-- returnResponse Finction call
-  //   } on SocketException {
-  //     throw FetchDataException('No Internet Conncetion');
-  //   }
-  //   return responseJson;
-  // }
 
 
 

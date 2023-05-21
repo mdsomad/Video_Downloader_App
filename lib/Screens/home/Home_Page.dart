@@ -96,125 +96,135 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    Consumer<HomeProviderModel>(//* <-- Provider Use
-                        builder: (context, provider, child) {
-                      return InputSearchWidget(
-                        controller: videoLinkController,
-                        onClearPreass: () {
-                          videoLinkController.clear();
-                          provider.setcontrollerValueChack("");
-                        },
-                        controllerValueChack: provider.controllerValueChack,
-                        onPreass: () {
-                          if (videoLinkController.text.isEmpty) {
-                            Utils.ftushBarErrorMessage(
-                                "Please Enter A Youtube Link", context);
-                          } else {
-                            provider.checkVideoPlatformThenApiCall(
-                                videoLinkController.text.toString().trim());
-                            FocusScope.of(context).unfocus();
-                            //! Provider.of<HomeProviderModel>(context,listen: false).fatchVideoListApi(videoLinkController.text);
-                          }
-                        },
-                      );
-                    }),
-
-
-
-                    const SizedBox(
-                      height: 40,
-                    ),
-
-
-
-
-                     //* <-- Provider Use
-                    Consumer<HomeProviderModel>(builder: (context, provider, child) {
-
-                      var data;
-                      if (provider.checkVideoPlatformLink == "instagram") {
-                        data = provider.instagramVideo;
-                      } else {
-                        data = provider.videoList;
-                      }
-
-                      switch (data.status) {
-
-                        case Status.ISEMPTY:
-                          return Container(
-                              height: MediaQuery.of(context).size.height / 2,
-                              child: Center(
-                                  child: Text(data.nodata.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold))));
-
-                        case Status.LOADING:
-                          return Container(
-                              height: MediaQuery.of(context).size.height / 2,
-                              child: Center(
-                                  child: CircularProgressIndicator(
-                                color: Colors.green,
-                              )));
-
-                        // ! LoadingAnimation();
-
-                        case Status.ERROR:
-
-                          return HomeStatusErrorWidget(errorData: data, provider: provider, videoLinkController: videoLinkController,);
-
-                        case Status.COMPLETED:
-
-                          if (provider.checkVideoPlatformLink == "instagram") {
-                            return InstagramCardBodyWidget(
-                              videoList: provider.instagramVideo,
-                              provider: provider,
-                            );
-
-                          } else {
-
-                            return CardBodyWidget(
-                              videoList: provider.videoList,
-                              provider: provider,
-                            );
-
-                            
-                          }
-
-                        default:
-                          return Text("NO Data");
-                      }
-                    }),
-                  ],
-                ),
-
-
-
-
-
-
-                Consumer<HomeProviderModel>(//* <-- Provider Use
-                    builder: (context, provider, child) {
-                     return provider.isDataLoaded
-                      ? Positioned(
-                          top: 170,
-                          left: 45,
-                          child: const Text(
-                            "DOWNLOAD",
-                            style: TextStyle(
-                                fontSize: 21,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ))
-                      : SizedBox();
-                }),
-              ],
+          
+          //* singlechildscrollview scrolls effect disabled
+          child: NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (overScroll) {
+              overScroll.disallowIndicator();
+             return false;
+            },
+            
+            child: SingleChildScrollView(
+               physics: ClampingScrollPhysics(),
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Consumer<HomeProviderModel>(//* <-- Provider Use
+                          builder: (context, provider, child) {
+                        return InputSearchWidget(
+                          controller: videoLinkController,
+                          onClearPreass: () {
+                            videoLinkController.clear();
+                            provider.setcontrollerValueChack("");
+                          },
+                          controllerValueChack: provider.controllerValueChack,
+                          onPreass: () {
+                            if (videoLinkController.text.isEmpty) {
+                              Utils.ftushBarErrorMessage(
+                                  "Please Enter A Youtube Link", context);
+                            } else {
+                              provider.checkVideoPlatformThenApiCall(
+                                  videoLinkController.text.toString().trim());
+                              FocusScope.of(context).unfocus();
+                              //! Provider.of<HomeProviderModel>(context,listen: false).fatchVideoListApi(videoLinkController.text);
+                            }
+                          },
+                        );
+                      }),
+          
+          
+          
+                      const SizedBox(
+                        height: 40,
+                      ),
+          
+          
+          
+          
+                       //* <-- Provider Use
+                      Consumer<HomeProviderModel>(builder: (context, provider, child) {
+          
+                        var data;
+                        if (provider.checkVideoPlatformLink == "instagram") {
+                          data = provider.instagramVideo;
+                        } else {
+                          data = provider.videoList;
+                        }
+          
+                        switch (data.status) {
+          
+                          case Status.ISEMPTY:
+                            return Container(
+                                height: MediaQuery.of(context).size.height / 2,
+                                child: Center(
+                                    child: Text(data.nodata.toString(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold))));
+          
+                          case Status.LOADING:
+                            return Container(
+                                height: MediaQuery.of(context).size.height / 2,
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.green,
+                                )));
+          
+                          // ! LoadingAnimation();
+          
+                          case Status.ERROR:
+          
+                            return HomeStatusErrorWidget(errorData: data, provider: provider, videoLinkController: videoLinkController,);
+          
+                          case Status.COMPLETED:
+          
+                            if (provider.checkVideoPlatformLink == "instagram") {
+                              return InstagramCardBodyWidget(
+                                videoList: provider.instagramVideo,
+                                provider: provider,
+                              );
+          
+                            } else {
+          
+                              return CardBodyWidget(
+                                videoList: provider.videoList,
+                                provider: provider,
+                              );
+          
+                              
+                            }
+          
+                          default:
+                            return Text("NO Data");
+                        }
+                      }),
+                    ],
+                  ),
+          
+          
+          
+          
+          
+          
+                  Consumer<HomeProviderModel>(//* <-- Provider Use
+                      builder: (context, provider, child) {
+                       return provider.isDataLoaded
+                        ? Positioned(
+                            top: 170,
+                            left: 45,
+                            child: const Text(
+                              "DOWNLOAD",
+                              style: TextStyle(
+                                  fontSize: 21,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ))
+                        : SizedBox();
+                  }),
+                ],
+              ),
             ),
           ),
         ));

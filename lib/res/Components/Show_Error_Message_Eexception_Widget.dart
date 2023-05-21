@@ -48,7 +48,7 @@ class _ShowErrorMessageEexceptionWidgetState extends State<ShowErrorMessageEexce
                 child: Text(
                 widget.errorMessage,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 25,color: AppColor.redColor,fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 25,color: AppColor.white,fontWeight: FontWeight.bold),
                           ),
               )),
           ),

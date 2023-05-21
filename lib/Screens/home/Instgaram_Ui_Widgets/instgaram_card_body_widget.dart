@@ -50,19 +50,10 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
   
   @override
   Widget build(BuildContext context) {
-  //* Video List Filter
-  // List? filterVideosList = videoList.data!.response!.videos?.where(((element) => element.hasAudio == true )).toList();
-  
- //* List Reversed
-  // filterVideosList = new List.from(filterVideosList!.reversed);
-
-  //* Audios List Filter
- //  audios = audios.where(((element) => element.audioFormat == "mp4" )).toList();
     
     return Container(
-  // height: 500,
    width: MediaQuery.of(context).size.width *.9,
-  decoration: BoxDecoration(
+   decoration: BoxDecoration(
      color: AppColor.cardColor,
      borderRadius: BorderRadius.circular(10),
      border: Border.all(color:AppColor.white,width: 1.5)
@@ -84,8 +75,6 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
       ),
 
       Container(
-        // height: 150,
-        
         child: ListView.builder(
           itemCount:1,
           shrinkWrap: true,
@@ -117,9 +106,9 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
               style:TextStyle(color:AppColor.white)),
 
                TextButton(onPressed: (){
-              //  provider.downloadFile(filterVideosList![index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),false,context);
               // Navigator.push(context, MaterialPageRoute(builder: ((context) => DownloadPage2(filterVideosList:filterVideosList![index],videoList:videoList,))));
-
+                provider.downloadFile(videoList.data!.response.video.contentUrl.toString(),videoList.data!.response.video.name.toString(),videoList.data!.response.video.width.toString(),false,context);
+                
               }, 
               style: ButtonStyle(overlayColor:
                     MaterialStateColor.resolveWith((states) =>Colors.white.withOpacity(0.1)),

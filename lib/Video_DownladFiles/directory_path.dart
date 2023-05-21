@@ -21,11 +21,7 @@ class DirectoryPath{
 
 
   Future<String> getFilePath(String filename) async {
-    // final dir = Directory('/storage/emulated/0/Download');
-    // final dir = await getApplicationDocumentsDirectory();
     final basrStorage = await getExternalStorageDirectory();
-
-    // return "${dir.path}/$filename";
     return "${basrStorage}/$filename";
   }
   

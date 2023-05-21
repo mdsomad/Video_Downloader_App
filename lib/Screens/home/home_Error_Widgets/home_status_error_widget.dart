@@ -28,6 +28,10 @@ class HomeStatusErrorWidget extends StatelessWidget {
       return  ShowErrorMessageEexceptionWidget(errorMessage: errorData.message, onPress: () { 
           provider.checkVideoPlatformThenApiCall(videoLinkController.text.toString().trim());
        },);
+    }else if(errorData.message.toString() == "Unprocessable Content Please Enter A Video Url Link"){
+      return  ShowErrorMessageEexceptionWidget(errorMessage: "Please Enter A Video Url Link", onPress: () { 
+          provider.checkVideoPlatformThenApiCall(videoLinkController.text.toString().trim());
+       },);
     }else {
        return GeneralEexceptionWidget(onPress: () { 
                   provider.checkVideoPlatformThenApiCall(videoLinkController.text.toString().trim());

@@ -34,13 +34,13 @@ class _DownloadPage2State extends State<DownloadPage2> {
   @override
   void initState() {
     // TODO: implement initState
-    Provider.of<DownloadProvider>(context,listen:false).checkPermission();
+      Provider.of<DownloadProvider>(context,listen:false).checkFileExit();
 
-    
-      if(Provider.of<DownloadProvider>(context,listen:false).isPermission == true){
-            Provider.of<DownloadProvider>(context,listen:false).checkFileExit();
-            Provider.of<DownloadProvider>(context,listen:false).startDownloading(widget.filterVideosList,widget.videoList,context);
-      }
+      //  if(Provider.of<DownloadProvider>(context,listen:false).fileExist == false) {
+      //     Provider.of<DownloadProvider>(context,listen:false).startDownloading(widget.filterVideosList,widget.videoList,context);
+      //  }
+     Provider.of<DownloadProvider>(context,listen:false).startDownloading(widget.filterVideosList,widget.videoList,context);
+  
 
     super.initState();
   }
@@ -64,9 +64,7 @@ class _DownloadPage2State extends State<DownloadPage2> {
         ),
         body:Consumer<DownloadProvider>(  //* <-- Provider Use
         builder: (context, provider, child) {
-        return 
-
-        provider.isPermission ? Center(
+        return  Center(
           child: Column(
             children: [
               VideoTextWidget(),
@@ -91,9 +89,7 @@ class _DownloadPage2State extends State<DownloadPage2> {
               // Text("Downlad Screen",style:TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color:AppColors.white)),
             ],
           ),
-        ):Center(child: TextButton(onPressed: (){
-              provider.checkPermission();
-              }, child: Text("Permission issue")))
+        )
  ;
         })
 

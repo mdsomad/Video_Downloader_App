@@ -109,7 +109,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                    padding: const EdgeInsets.only(left:0),
                    child: IconButton(onPressed:press, icon:
         
-                  provider.fileExist ? Icon(Icons.save,color: Colors.green,) :
+                  provider.fileExist && provider.downloading == false ? Icon(Icons.save,color: Colors.green,) :
                   Icon(Icons.download,color:provider.downloading ? Colors.pink:Colors.white,)
                    
                    ),

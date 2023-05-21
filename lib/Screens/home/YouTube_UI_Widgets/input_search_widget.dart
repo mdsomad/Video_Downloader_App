@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Provider/home/home_provider.dart';
+import 'package:video_downloader_application/Utils/Utils.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 
@@ -26,13 +28,13 @@ class InputSearchWidget  extends StatelessWidget {
     child: Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: TextFormField(
+        child: TextField(
           
           
           controller: controller,
-          // textInputAction:TextInputAction.next,
           textInputAction: TextInputAction.search,
           style: TextStyle(color: Colors.white),
+          
           decoration: InputDecoration(
             
             hintText: "Enter video link",
@@ -67,8 +69,8 @@ class InputSearchWidget  extends StatelessWidget {
                 ],
               ),
             ),
-
-
+          
+          
 
             // Provider.of<HomeProviderModel>(context,listen: false).controllerValueChack.isNotEmpty  ? IconButton(onPressed: onClearPreass, icon:Icon(Icons.close,color: Colors.white,size: 30)) : IconButton(onPressed: onPreass, icon:Icon(Icons.search,color: Colors.white,size: 30)),
             //  Provider.of<HomeProviderModel>(context,listen: false).controllerValueChack.isNotEmpty  ? IconButton(onPressed: onClearPreass, icon:Icon(Icons.close,color: Colors.white,size: 30)) : IconButton(onPressed: onPreass, icon:Icon(Icons.search,color: Colors.white,size: 30)),
@@ -97,7 +99,23 @@ class InputSearchWidget  extends StatelessWidget {
             Provider.of<HomeProviderModel>(context,listen: false).setcontrollerValueChack(value);
             print(value);
           },
+
           
+          onSubmitted: (val) {
+            if(kDebugMode){
+              print("onSubmitted Value --> ${val.toString()}");
+            }
+            if(val.isNotEmpty){
+                Provider.of<HomeProviderModel>(context,listen: false).checkVideoPlatformThenApiCall(val.toString().trim());
+             }else{
+              Utils.ftushBarErrorMessage("Please Enter A Link", context);
+             }
+            
+          },
+          
+
+          
+
         ),
       ),
     ),

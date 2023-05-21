@@ -66,6 +66,7 @@ String numberFormat(int n) {
         // padding: EdgeInsets.only(left: 15,),
           // color: Colors.pink,
           child: ListView(
+            physics: ClampingScrollPhysics(),
             shrinkWrap: true,
             // mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.start,
