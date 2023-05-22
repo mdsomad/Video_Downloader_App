@@ -98,13 +98,26 @@ flutterDownloaderInitialize(){
 
     IsolateNameServer.registerPortWithName(receivePort.sendPort,'downloadingvideo');
    
-    receivePort.listen((message) {
-           progress = message;
-           Utils.toastMessage(progress.toString(),false);
-           print("progress Value this --> $progress");
-           notifyListeners();
-    
+    receivePort.listen((dynamic data) {
+        String id = data[0];
+        
+        DownloadTaskStatus status = data[1];
+   
+         progress = data[2];
+         Utils.toastMessage(progress.toString(),false);
+         print("progress Value this --> $progress");
+
+         if(status == DownloadTaskStatus.complete){
+            print("Download Complete");
+            Utils.toastMessage("Download Complete",true);
+         }
+         
+         notifyListeners();
      });
+  
+      
+           
+         
     
     FlutterDownloader.registerCallback(downloadCallback);
 
@@ -113,9 +126,9 @@ flutterDownloaderInitialize(){
 
    
 
-  static downloadCallback(id, status, progress){
+  static downloadCallback(String id, DownloadTaskStatus status, int progress){
     final SendPort? receivePort = IsolateNameServer.lookupPortByName('downloadingvideo');
-    receivePort!.send(progress);
+    receivePort!.send([id,status,progress]);
 }
 
 

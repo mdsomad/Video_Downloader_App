@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(providers:[
 
-             ChangeNotifierProvider<HomeProviderModel>(
-              create:(context)=>HomeProviderModel()
+             ChangeNotifierProvider<HomePageProvider>(
+              create:(context)=>HomePageProvider()
             ),
             
              ChangeNotifierProvider<DownloadProvider>(
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
     ],
 
     child:   MaterialApp(
-      title: 'Video Downloader Application',
+      title: 'Neontube Downloader',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

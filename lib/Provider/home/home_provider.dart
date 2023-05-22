@@ -1,10 +1,12 @@
 
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:video_downloader_application/Data/response/status.dart';
 import 'package:video_downloader_application/Models/Instagram_reel/instagram_reel_model.dart';
 import 'package:video_downloader_application/Repository/home_repository.dart';
@@ -15,9 +17,88 @@ import 'package:video_downloader_application/Utils/Utils.dart';
 
 
 
-class HomeProviderModel with ChangeNotifier{
+class HomePageProvider with ChangeNotifier{
 
   final _myRepo = HomeRepository();
+  
+
+
+
+
+
+
+
+
+
+late StreamSubscription _intentData;
+
+//TODO Create ReceiveSharingIntentFunction Function
+ReceiveSharingIntentFunction(TextEditingController videoLinkController){
+
+        _intentData = ReceiveSharingIntent.getTextStream().listen((String value) {
+              if(value != '' && value != null){
+                setcontrollerValueChack(value);
+                videoLinkController.text = value;
+                checkVideoPlatformThenApiCall(value.trim());
+                notifyListeners();
+
+                if(kDebugMode){
+                  print("Yes ReceiveSharing Data 1 --> $value");
+                } 
+                
+                
+            }else{
+              if(kDebugMode){
+                  print("This ReceiveSharing Data 1 --> $value");
+               }
+           
+             }
+          
+          
+         
+    });
+
+
+
+
+
+   ReceiveSharingIntent.getInitialText().then((String? value){
+          if(value != '' && value != null){
+              setcontrollerValueChack(value);
+              videoLinkController.text = value;
+              checkVideoPlatformThenApiCall(value.trim());
+              notifyListeners();
+
+
+            if(kDebugMode){
+               print("Yes ReceiveSharing Data 2 --> $value");
+            } 
+                
+              
+              
+          }else{
+              if(kDebugMode){
+                  print("This ReceiveSharing Data 2 --> $value");
+              } 
+         }
+         
+          
+
+      }).onError((error, stackTrace){
+         if(kDebugMode){
+           print("getLinkStream error: $error");
+         }
+      });
+  }
+  
+  
+  
+  
+  
+  
+
+
+
 
 String _controllerValueChack = "";
 String get controllerValueChack => _controllerValueChack;
@@ -42,6 +123,10 @@ setcontrollerValueChack(String value){
     _isDataLoaded = value;
     notifyListeners();
   }
+
+
+
+
 
 
 

@@ -48,7 +48,7 @@ class InputSearchWidget  extends StatelessWidget {
               child: Row(
                  mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-               Provider.of<HomeProviderModel>(context,listen: false).controllerValueChack.isNotEmpty  ? 
+               Provider.of<HomePageProvider>(context,listen: false).controllerValueChack.isNotEmpty  ? 
               IconButton(
               icon: Icon(Icons.clear,color: Colors.white,),
               onPressed: onClearPreass,
@@ -96,7 +96,7 @@ class InputSearchWidget  extends StatelessWidget {
           ),
 
           onChanged: (value) {
-            Provider.of<HomeProviderModel>(context,listen: false).setcontrollerValueChack(value);
+            Provider.of<HomePageProvider>(context,listen: false).setcontrollerValueChack(value);
             print(value);
           },
 
@@ -106,7 +106,7 @@ class InputSearchWidget  extends StatelessWidget {
               print("onSubmitted Value --> ${val.toString()}");
             }
             if(val.isNotEmpty){
-                Provider.of<HomeProviderModel>(context,listen: false).checkVideoPlatformThenApiCall(val.toString().trim());
+                Provider.of<HomePageProvider>(context,listen: false).checkVideoPlatformThenApiCall(val.toString().trim());
              }else{
               Utils.ftushBarErrorMessage("Please Enter A Link", context);
              }
