@@ -16,7 +16,9 @@ class FlutterDownloaderProvider with ChangeNotifier{
 
 
 
+DirectoryPath _directoryPath =  DirectoryPath();
 
+CheckPermission _checkPermission = CheckPermission();
 
 
 
@@ -35,14 +37,14 @@ class FlutterDownloaderProvider with ChangeNotifier{
 
   downloadFile(String url,String videoTitle,String videoquality,bool isAudio, BuildContext context)async{
 
-    final status = await Permission.storage.request();
+     final status = await Permission.storage.request();
 
     if(status.isGranted){
 
       try {
 
-      // final basrStorage = await getExternalStorageDirectory();
-      final dir = Directory('/storage/emulated/0/Download');
+      final basrStorage = await getExternalStorageDirectory();
+      // final dir = Directory('/storage/emulated/0/Download');
       
       if(isAudio == true){
           fileName = "$videoTitle($videoquality).mp3";
@@ -54,7 +56,7 @@ class FlutterDownloaderProvider with ChangeNotifier{
      Utils.toastMessage("Downloading Start",true);
      final id = await FlutterDownloader.enqueue(
         url: url,
-        savedDir:dir.path,
+        savedDir:basrStorage!.path,
         fileName: fileName,
         showNotification: true, // show download progress in status bar (for Android)
         openFileFromNotification: true, // click on notification to open downloaded file (for Android)

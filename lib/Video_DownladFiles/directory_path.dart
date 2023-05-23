@@ -20,9 +20,26 @@ class DirectoryPath{
 
 
 
-  Future<String> getFilePath(String filename) async {
-    final basrStorage = await getExternalStorageDirectory();
-    return "${basrStorage}/$filename";
+  // Future<String> getFilePath(String filename) async {
+  //   final basrStorage = await getExternalStorageDirectory();
+  //   return "${basrStorage}/$filename";
+  // }
+
+
+
+
+
+getFilePath() async {
+    final Directory? tempDir = await getExternalStorageDirectory();
+    final filePath = Directory(tempDir!.path);
+    if (await filePath.exists()) {
+      return filePath.path;
+    } else {
+      await filePath.create(recursive: true);
+      return filePath.path;
+    }
   }
+
+  
   
 }

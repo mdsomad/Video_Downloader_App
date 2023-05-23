@@ -102,6 +102,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.2"
+  flutter_insta:
+    dependency: "direct main"
+    description:
+      name: flutter_insta
+      sha256: "69f5dbffd92498d2d72f6e5a63837dfb39fa6de16a2c827c355c0700e751ebd5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_lints:
     dependency: "direct dev"
     description:

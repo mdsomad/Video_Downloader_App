@@ -22,6 +22,9 @@ import 'package:video_downloader_application/Utils/Utils.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 import 'package:video_downloader_application/res/Components/internet_exceptions_widget.dart';
 import 'package:video_downloader_application/res/assets/image_asset.dart';
+import 'package:flutter_insta/flutter_insta.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,7 +36,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   
   TextEditingController videoLinkController = TextEditingController();
-
+FlutterInsta flutterInsta = FlutterInsta();
 
 
 
@@ -93,10 +96,6 @@ class _HomePageState extends State<HomePage> {
 
 
 
-
-
-
-
   static downloadCallback(id, status, progress) {
     final SendPort? receivePort = IsolateNameServer.lookupPortByName('downloadingvideo');
     receivePort!.send([id, status, progress]);
@@ -111,6 +110,26 @@ class _HomePageState extends State<HomePage> {
 
 
 
+
+
+
+
+String? username, followers = " ", following, bio, website, profileimage;
+ void downloadReels() async {
+    var s = await flutterInsta.downloadReels("https://www.instagram.com/reel/CsJDjgppsdL/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA==");
+     var s1 = await flutterInsta.getProfileData("md_somad");
+    print(s);
+    setState(() {
+      this.username = flutterInsta.username; //username
+      this.followers = flutterInsta.followers; //number of followers
+      this.following = flutterInsta.following; // number of following
+      this.website = flutterInsta.website; // bio link
+      this.bio = flutterInsta.bio; // Bio
+      this.profileimage = flutterInsta.imgurl; // Profile picture URL
+      print(bio);
+    });
+   
+  }
 
 
 
@@ -168,8 +187,10 @@ class _HomePageState extends State<HomePage> {
                             if (videoLinkController.text.isEmpty) {
                               Utils.ftushBarErrorMessage("Please Enter A Youtube Link", context);
                             } else {
+                              //  downloadReels();
                               provider.checkVideoPlatformThenApiCall(videoLinkController.text.toString().trim());
                               FocusScope.of(context).unfocus();
+
                             }
                           },
                         );
