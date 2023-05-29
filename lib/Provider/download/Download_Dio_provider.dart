@@ -15,6 +15,7 @@ import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
+import 'package:video_downloader_application/Models/download_details_store_model/download_details_store_model.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
 
 class DownloadProvider with ChangeNotifier{
@@ -61,9 +62,11 @@ downoadSpeed(recv_Byts){
   Dio dio = Dio();
   
 
-  Future<void> startDownloading(var filterVideosList, ApiResponse<VideoModel> videoList,BuildContext context) async {
-     
-     //! This Code currently not Use
+  Future<void> startDownloading(String url,String title,String quality,BuildContext context) async {
+   
+
+
+
      final status = await Permission.storage.request();
 
       if(status.isGranted){
@@ -76,9 +79,8 @@ downoadSpeed(recv_Byts){
     //  fileName = "$date.mp4";
      
 
-     final title = videoList.data!.response!.title;
 
-     fileName = "$title(${filterVideosList.quality}).mp4";
+     fileName = "$title(${quality}).mp4";
     
       filePath = await _getFilePath1(fileName);
 
@@ -87,7 +89,7 @@ downoadSpeed(recv_Byts){
     progress = 0;
 
     await dio.download(
-      filterVideosList.url.toString(),
+      url.toString(),
       filePath,
       onReceiveProgress:(recivedBytes, totalBytes) {
           progress = recivedBytes / totalBytes;
@@ -123,20 +125,22 @@ downoadSpeed(recv_Byts){
 
 
 
-  //! Not Use
+
   Future<String> _getFilePath1(String filename) async {
-    // final dir = await getApplicationDocumentsDirectory();
-    final dir = Directory('/storage/emulated/0/Download');
-    return "${dir.path}/$filename";
+    final dir = await getExternalStorageDirectory();
+    // final dir = Directory('/storage/emulated/0/Download');
+    // return "${dir.path}/$filename";
+    return "${dir!.path}/$filename";
   }
   
 
 
 
-     cancelDownlad(){
-       cancelToken.cancel();
-       setDownloading(false);
-    }
+  cancelDownlad(){
+     cancelToken.cancel();
+     setFileExist(false);
+     setDownloading(false);
+  }
 
 
 
@@ -154,6 +158,22 @@ downoadSpeed(recv_Byts){
   openfile(){
     OpenFile.open(filePath);
   }
+
+
+
+
+
+ List<DownloadDetailsStoreModel> _videoSaveList = [];
+ List<DownloadDetailsStoreModel> get videoSaveList => _videoSaveList;
+
+
+
+setVideoSaveList(DownloadDetailsStoreModel videoSaveModel){
+    _videoSaveList.add(videoSaveModel);
+    notifyListeners();
+}
+
+  
   
     
 }

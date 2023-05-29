@@ -15,34 +15,27 @@ import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 
 
-class DownloadPage2 extends StatefulWidget {
-  var filterVideosList;
- ApiResponse<VideoModel> videoList;
-   DownloadPage2({
-    Key? key,
-    required this.filterVideosList,
-    required this.videoList,
-  }) : super(key: key);
+class DownloadDioPage extends StatefulWidget {
+//   var filterVideosList;
+//  ApiResponse<VideoModel> videoList;
+//    DownloadDioPage({
+//     Key? key,
+//     required this.filterVideosList,
+//     required this.videoList,
+//   }) : super(key: key);
 
   @override
-  State<DownloadPage2> createState() => _DownloadPage2State();
+  State<DownloadDioPage> createState() => _DownloadDioPageState();
 }
 
-class _DownloadPage2State extends State<DownloadPage2> {
+class _DownloadDioPageState extends State<DownloadDioPage> {
 
 
   @override
   void initState() {
     // TODO: implement initState
       Provider.of<DownloadProvider>(context,listen:false).checkFileExit();
-
-      //  if(Provider.of<DownloadProvider>(context,listen:false).fileExist == false) {
-      //     Provider.of<DownloadProvider>(context,listen:false).startDownloading(widget.filterVideosList,widget.videoList,context);
-      //  }
-     Provider.of<DownloadProvider>(context,listen:false).startDownloading(widget.filterVideosList,widget.videoList,context);
-  
-
-    super.initState();
+      super.initState();
   }
   
   
@@ -54,26 +47,26 @@ class _DownloadPage2State extends State<DownloadPage2> {
         appBar: AppBar(
           backgroundColor: AppColor.appBarColor,
           elevation: 7,
-          title: Container(
-              // color: Colors.yellow,
-              padding: EdgeInsets.only(bottom: 15),
-              child: Image.asset("Assets/AppIcons/Frame.png")),
+          // title: Container(
+          //     // color: Colors.yellow,
+          //     padding: EdgeInsets.only(bottom: 15),
+          //     child: Image.asset("Assets/AppIcons/Frame.png")),
           // toolbarHeight: 30,
 
 
         ),
         body:Consumer<DownloadProvider>(  //* <-- Provider Use
         builder: (context, provider, child) {
-        return  Center(
+        return provider.videoSaveList.isNotEmpty ? Center(
           child: Column(
             children: [
               VideoTextWidget(),
 
-              VideoDownloadDisplayWidget(provider: provider,filterVideosList: widget.filterVideosList, videoList: widget.videoList, press: () { 
+              VideoDownloadDisplayWidget(thumbnails: provider.videoSaveList[0].thumbnails.toString(), title:provider.videoSaveList[0].title.toString(), press: () { 
 
                  provider.fileExist && provider.downloading == false 
                  ? provider.openfile()
-                 : provider.startDownloading(widget.filterVideosList,widget.videoList,context);
+                 : provider.startDownloading(provider.videoSaveList[0].videourl.toString(),provider.videoSaveList[0].title.toString(),provider.videoSaveList[0].videoquality.toString(),context);
                 
                },),
             
@@ -89,8 +82,55 @@ class _DownloadPage2State extends State<DownloadPage2> {
               // Text("Downlad Screen",style:TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color:AppColors.white)),
             ],
           ),
-        )
- ;
+        ) : SizedBox();
+
+        
+        
+        
+        
+        
+      //    ValueListenableBuilder<Box<VideoDownloadModel>>(
+      //     valueListenable:  Boxes.getData().listenable(),
+      //    builder:(context, boxValue, _) {
+
+      //     var data = boxValue.values.toList().cast<VideoDownloadModel>();
+          
+          
+          
+      //     return data.isNotEmpty ? Center(
+      //     child: Column(
+      //       children: [
+      //         VideoTextWidget(),
+
+      //         VideoDownloadDisplayWidget(provider: provider,thumbnails: data[0].thumbnails, title:data[0].title, press: () { 
+
+      //            provider.fileExist && provider.downloading == false 
+      //            ? provider.openfile()
+      //            : provider.startDownloading(data[0].videourl,data[0].title,data[0].videoquality,context);
+                
+      //          },),
+            
+              
+              
+              
+        
+              
+              
+      //         // context),
+      //         // audioText(context),
+             
+      //         // Text("Downlad Screen",style:TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color:AppColors.white)),
+      //       ],
+      //     ),
+      //   ) : SizedBox();
+      //   },
+      // )
+        
+        
+        
+        
+        
+ 
         })
 
     );

@@ -20,6 +20,8 @@ import 'package:video_downloader_application/Utils/Utils.dart';
 class HomePageProvider with ChangeNotifier{
 
   final _myRepo = HomeRepository();
+
+  TextEditingController videoLinkController = TextEditingController();
   
 
 
@@ -33,7 +35,7 @@ class HomePageProvider with ChangeNotifier{
 late StreamSubscription _intentData;
 
 //TODO Create ReceiveSharingIntentFunction Function
-ReceiveSharingIntentFunction(TextEditingController videoLinkController){
+ReceiveSharingIntentFunction(){
 
         _intentData = ReceiveSharingIntent.getTextStream().listen((String value) {
               if(value != '' && value != null){
@@ -168,8 +170,6 @@ ApiResponse<InstagramReelModel> instagramVideo = ApiResponse.isEmpty("Enter A Vi
 
 
 
-
-
  //TODO Create checkvideoplatform function  (Them Api call)
  void checkVideoPlatformThenApiCall(String PassVideoUrl){
    if(PassVideoUrl.contains("https://www.instagram.com")){
@@ -182,7 +182,7 @@ ApiResponse<InstagramReelModel> instagramVideo = ApiResponse.isEmpty("Enter A Vi
        if(kDebugMode){
           print("This is a facebook Url");
         }
-        setCheckVideoPlatformLink("facebook");
+       setCheckVideoPlatformLink("facebook");    
    }else{
          if(kDebugMode){
           print("This is a Youtube Url");

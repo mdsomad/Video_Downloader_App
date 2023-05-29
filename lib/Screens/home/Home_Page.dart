@@ -15,6 +15,7 @@ import 'package:video_downloader_application/Provider/download/FlutterDownloader
 import 'package:video_downloader_application/Provider/home/home_provider.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
 import 'package:video_downloader_application/Screens/home/Instgaram_Ui_Widgets/instgaram_card_body_widget.dart';
+import 'package:video_downloader_application/Screens/home/SideMenuBar/SideMenuBar.dart';
 import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/card_body_widget.dart';
 import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/input_search_widget.dart';
 import 'package:video_downloader_application/Screens/home/home_Error_Widgets/home_status_error_widget.dart';
@@ -35,7 +36,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
-  TextEditingController videoLinkController = TextEditingController();
+
+GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 FlutterInsta flutterInsta = FlutterInsta();
 
 
@@ -85,7 +87,7 @@ FlutterInsta flutterInsta = FlutterInsta();
 
 
      final homeProviderModel = Provider.of<HomePageProvider>(context,listen: false);
-     homeProviderModel.ReceiveSharingIntentFunction(videoLinkController);              //* <-- Call This ReceiveSharingIntentFunction Function
+     homeProviderModel.ReceiveSharingIntentFunction();              //* <-- Call This ReceiveSharingIntentFunction Function
     
     
     
@@ -104,9 +106,13 @@ FlutterInsta flutterInsta = FlutterInsta();
   @override
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloadingvideo');
-    videoLinkController.dispose();
+   // videoLinkController.dispose();
     super.dispose();
   }
+
+
+
+
 
 
 
@@ -143,13 +149,24 @@ String? username, followers = " ", following, bio, website, profileimage;
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: AppColor.bodyColor,
+
+        endDrawerEnableOpenDragGesture: true,
+        key: _drawerKey,
+        drawer: SideMenu(),
+        
         appBar: AppBar(
           backgroundColor: AppColor.appBarColor,
+          automaticallyImplyLeading: false,
           elevation: 7,
-          title: Container(
-              // color: Colors.yellow,
-              padding: EdgeInsets.only(bottom: 15),
-              child: Image.asset(ImageAssets.homePageAppBarMenuLogo)),
+          title: InkWell(
+            onTap: (){
+               _drawerKey.currentState!.openDrawer();
+            },
+            child: Container(
+                // color: Colors.yellow,
+                padding: EdgeInsets.only(bottom: 15),
+                child: Image.asset(ImageAssets.homePageAppBarMenuLogo)),
+          ),
           // toolbarHeight: 30,
 
           actions: [
@@ -159,6 +176,10 @@ String? username, followers = " ", following, bio, website, profileimage;
                 child: Image.asset(ImageAssets.homePageAppBarYoutubeLogo)),
           ],
         ),
+
+
+
+        
         body: SafeArea(
           
           //* singlechildscrollview scrolls effect disabled
@@ -177,18 +198,18 @@ String? username, followers = " ", following, bio, website, profileimage;
                       Consumer<HomePageProvider>(//* <-- Provider Use
                           builder: (context, provider, child) {
                         return InputSearchWidget(
-                          controller: videoLinkController,
+                          controller: provider.videoLinkController,
                           onClearPreass: () {
-                            videoLinkController.clear();
+                           provider.videoLinkController.clear();
                             provider.setcontrollerValueChack("");
                           },
                           controllerValueChack: provider.controllerValueChack,
                           onPreass: () {
-                            if (videoLinkController.text.isEmpty) {
+                            if (provider.videoLinkController.text.isEmpty) {
                               Utils.ftushBarErrorMessage("Please Enter A Youtube Link", context);
                             } else {
                               //  downloadReels();
-                              provider.checkVideoPlatformThenApiCall(videoLinkController.text.toString().trim());
+                              provider.checkVideoPlatformThenApiCall(provider.videoLinkController.text.toString().trim());
                               FocusScope.of(context).unfocus();
 
                             }
@@ -239,7 +260,7 @@ String? username, followers = " ", following, bio, website, profileimage;
           
                           case Status.ERROR:
           
-                            return HomeStatusErrorWidget(errorData: data, provider: provider, videoLinkController: videoLinkController,);
+                            return HomeStatusErrorWidget(errorData: data, provider: provider, videoLinkController:provider.videoLinkController,);
           
                           case Status.COMPLETED:
           

@@ -1,18 +1,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
+import 'package:video_downloader_application/Provider/download/Download_Dio_provider.dart';
 
 
 
 
 class VideoDownloadDisplayWidget extends StatelessWidget {
-  final dynamic provider;
-  final dynamic filterVideosList;
-  final ApiResponse<VideoModel> videoList;
+  final String thumbnails;
+  final String title;
   final VoidCallback press;
-  VideoDownloadDisplayWidget({super.key, required this.provider, required this.filterVideosList, required this.videoList, required this.press});
+  VideoDownloadDisplayWidget({super.key, required this.thumbnails, required this.title, required this.press});
 
 
    String formatBytes(int bytes, int decimals) {
@@ -26,6 +27,9 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    return  Consumer<DownloadProvider>(  //* <-- Provider Use
+        builder: (context, provider, child) {
+    
     return Container( 
     height: 100,
     width: MediaQuery.of(context).size.width,
@@ -45,7 +49,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                 width: 120,
                 // color: Color(0xff4F4F4F),
                 child: Image.network(
-                videoList.data!.response!.thumbnails![0].url.toString(),
+                  thumbnails,
                 fit: BoxFit.cover,
                 ),
               ),
@@ -81,9 +85,9 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          videoList.data!.response!.title!.length > 10
-                              ? "${videoList.data!.response!.title!.substring(0,10)}..."
-                              : videoList.data!.response!.title!
+                         title.length > 10
+                              ? "${title.substring(0,10)}..."
+                              : title
                           
                           ,textAlign: TextAlign.start,style: TextStyle(color:Color(0xffFFFFFF),fontWeight: FontWeight.bold),),
                         SizedBox(width: 20,),
@@ -121,6 +125,8 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
       ],
     ),
    );
+
+        });
   }
 }
 

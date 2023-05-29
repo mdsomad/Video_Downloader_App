@@ -31,7 +31,7 @@ class DirectoryPath{
 
 getFilePath() async {
     final Directory? tempDir = await getExternalStorageDirectory();
-    final filePath = Directory(tempDir!.path);
+    final filePath = Directory("${tempDir!.path}");
     if (await filePath.exists()) {
       return filePath.path;
     } else {

@@ -43,7 +43,8 @@ CheckPermission _checkPermission = CheckPermission();
 
       try {
 
-      final basrStorage = await getExternalStorageDirectory();
+      // final basrStorage = await getExternalStorageDirectory();
+      final basrStorage = await _directoryPath.getFilePath();
       // final dir = Directory('/storage/emulated/0/Download');
       
       if(isAudio == true){
@@ -56,11 +57,12 @@ CheckPermission _checkPermission = CheckPermission();
      Utils.toastMessage("Downloading Start",true);
      final id = await FlutterDownloader.enqueue(
         url: url,
-        savedDir:basrStorage!.path,
+        savedDir:basrStorage,
         fileName: fileName,
         showNotification: true, // show download progress in status bar (for Android)
         openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-        saveInPublicStorage: true
+        saveInPublicStorage: true,
+        allowCellular: true
        ).whenComplete(() =>{
         Utils.toastMessage("Downloading Complete",true),
           setDownloading(false)
