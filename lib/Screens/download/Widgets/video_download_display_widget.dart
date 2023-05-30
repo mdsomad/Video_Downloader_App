@@ -85,8 +85,8 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                         title.length > 10
-                              ? "${title.substring(0,10)}..."
+                         title.length > 20
+                              ? "${title.substring(0,20)}..."
                               : title
                           
                           ,textAlign: TextAlign.start,style: TextStyle(color:Color(0xffFFFFFF),fontWeight: FontWeight.bold),),
@@ -98,8 +98,10 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(provider.speedShow.toString(),textAlign: TextAlign.start,style: TextStyle(color:Color(0xff00C950),fontWeight: FontWeight.bold),),
-                        SizedBox(width: 90,),
+                        Text(""
+                          //formatBytes(provider.prev,0)
+                         ,textAlign: TextAlign.start,style: TextStyle(color:Color(0xff00C950),fontWeight: FontWeight.bold),),
+                        SizedBox(width: 140),
                         Text("${(provider.progress * 100).toInt().toString()} %",textAlign: TextAlign.start,style: TextStyle(color:Color(0xffFFFFFF),fontWeight: FontWeight.bold),),
                       ],
                     ),

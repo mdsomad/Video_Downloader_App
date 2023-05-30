@@ -6,7 +6,9 @@
 
 
 
+import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -48,16 +50,39 @@ setFileExist(bool value){
 }
 
 
+
+
+ String formatBytes(int bytes, int decimals) {
+    if (bytes == 00) return "(?) MB";
+    if (bytes <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(bytes) / log(1024)).floor();
+    return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) +' ' + suffixes[i];
+  }
+
+
+
+
+
 downoadSpeed(recv_Byts){
-  prev = 0;
-  var next = recv_Byts;
-  var speed =  next - prev;
-  prev = speed;
-  speedShow = speed;
-  notifyListeners();
+   if(downloading == true){
+       Timer(Duration(seconds: 1), () {{
+          prev = 0;
+          var next = recv_Byts;
+          var speed =  next - prev;
+          prev = speed;
+          speedShow = speed;
+          notifyListeners();
+          print(formatBytes(speedShow,0));
+       }});
+   }
+  
+
+ 
  
 }
-  
+
+ 
 
   Dio dio = Dio();
   
@@ -92,6 +117,7 @@ downoadSpeed(recv_Byts){
       url.toString(),
       filePath,
       onReceiveProgress:(recivedBytes, totalBytes) {
+         //! downoadSpeed(recivedBytes);
           progress = recivedBytes / totalBytes;
           notifyListeners();
           print(progress);

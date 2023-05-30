@@ -1,5 +1,9 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:video_downloader_application/Provider/Settings/Settings_provider.dart';
+import 'package:video_downloader_application/Services/user_preference.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 
@@ -18,7 +22,9 @@ class SettingsScreen extends StatelessWidget {
         
       ),
 
-      body: Container(
+      body: Consumer<SettingsProvider>(
+       builder:(context, providerValue, child) {
+        return Container(
         color: AppColor.bodyColor,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -31,8 +37,13 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   Text("Downloading",style: TextStyle( color:Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
                   Spacer(),
-                  Switch(value:false, onChanged: (value) {
-                    
+                  Switch(value:providerValue.downloading, onChanged: (value) {
+
+                       providerValue.setDownloading(value);  //* <-- SettingsProvider Class ka setDownloading Function Call Raha hai
+
+                       if(kDebugMode){
+                          print('Switch button Value --> $value');
+                        }
                   },)
                   
                   
@@ -42,9 +53,15 @@ class SettingsScreen extends StatelessWidget {
             ],
             
           ),
-        )),
+        )
+      );
       
-      
+       },)
+
+
+
     );
+
+    
   }
 }

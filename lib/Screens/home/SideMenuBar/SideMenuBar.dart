@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:video_downloader_application/Screens/home/Settings/Settings_Screen.dart';
+import 'package:video_downloader_application/Screens/Settings/Settings_Screen.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 
 

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:video_downloader_application/Data/response/status.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
+import 'package:video_downloader_application/Provider/Settings/Settings_provider.dart';
 import 'package:video_downloader_application/Provider/download/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Provider/home/home_provider.dart';
 import 'package:video_downloader_application/Animation/Loading_Animation.dart';
@@ -19,6 +20,7 @@ import 'package:video_downloader_application/Screens/home/SideMenuBar/SideMenuBa
 import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/card_body_widget.dart';
 import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/input_search_widget.dart';
 import 'package:video_downloader_application/Screens/home/home_Error_Widgets/home_status_error_widget.dart';
+import 'package:video_downloader_application/Services/user_preference.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
 import 'package:video_downloader_application/res/Colors/app_colors.dart';
 import 'package:video_downloader_application/res/Components/internet_exceptions_widget.dart';
@@ -54,6 +56,14 @@ FlutterInsta flutterInsta = FlutterInsta();
   void initState() {
     // TODO: implement initState
     super.initState();
+
+
+    var settingsProvider = Provider.of<SettingsProvider>(context,listen:false);
+    settingsProvider.getSeveDownloading();  //* <-- SettingsProvider Class ka getSeveDownloading Function Call Raha hai
+    
+    
+    
+    
     
     IsolateNameServer.registerPortWithName(receivePort.sendPort, 'downloadingvideo');
 

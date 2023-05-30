@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/download_details_store_model/download_details_store_model.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
+import 'package:video_downloader_application/Provider/Settings/Settings_provider.dart';
 import 'package:video_downloader_application/Provider/download/Download_Dio_provider.dart';
 import 'package:video_downloader_application/Provider/main_home_page_provider.dart/MainHomePage_Provider.dart';
 import 'package:video_downloader_application/Screens/download/Download_Dio_Page.dart';
@@ -119,9 +120,17 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                TextButton(onPressed: ()async{
 
 
-                    var downloadProvider = Provider.of<DownloadProvider>(context,listen:false);
+                   
+                    var settingsProvider = Provider.of<SettingsProvider>(context,listen:false);
 
-                     DownloadDetailsStoreModel downloadDetailsStoreModel = DownloadDetailsStoreModel(videourl: filterVideosList![index].url.toString(), title:videoList.data!.response!.title.toString(), thumbnails: videoList.data!.response!.thumbnails![0].url.toString(), videoquality:filterVideosList[index].quality);
+                    
+                    if(settingsProvider.downloading == true){
+                        provider.downloadFile(filterVideosList![index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),false,context);   
+                    }else{
+
+                    var downloadProvider = Provider.of<DownloadProvider>(context,listen:false);
+                     
+                    DownloadDetailsStoreModel downloadDetailsStoreModel = DownloadDetailsStoreModel(videourl: filterVideosList![index].url.toString(), title:videoList.data!.response!.title.toString(), thumbnails: videoList.data!.response!.thumbnails![0].url.toString(), videoquality:filterVideosList[index].quality);
 
 
 
@@ -140,9 +149,11 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(filterVideosList[index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),context);
                          Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                     }
+                         
+                      print(downloadProvider.videoSaveList[0].videoquality);
+                  
 
-                   print(downloadProvider.videoSaveList[0].videoquality);
-
+                    }
                 
                 
                    

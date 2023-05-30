@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -40,6 +42,23 @@ Future<bool> removeUser()async{                                          //* <--
    sp.clear();
    return true;
 }
+
+
+
+
+static Future<bool> saveDownloading(bool value)async{
+   SharedPreferences preferences = await SharedPreferences.getInstance();
+   return await preferences.setBool("Downloading", value);
+}
+
+
+
+
+//TODO Create getDownloading function
+static Future<bool?> getDownloading()async{                                    //* <-- This function currently not use
+     SharedPreferences preferences = await SharedPreferences.getInstance();
+     return await preferences.getBool("Downloading");
+  }
   
   
   
