@@ -39,7 +39,7 @@ class _MainHomePageState extends State<MainHomePage> {
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     DownloadDioPage(),
-    Center(child: Placeholder()),
+    PlayListPage()
   ];
 
 

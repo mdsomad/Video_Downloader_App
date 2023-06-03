@@ -15,9 +15,9 @@ class Utils {
 
 
   //TODO Fluttertoast Message
-  static toastMessage(String message, bool isCenter){
+  static toastMessage(String message, bool isCenter ,{Color color = Colors.purple}) {
     Fluttertoast.showToast(msg: message,
-      backgroundColor: Colors.purple,
+      backgroundColor: color,
       textColor: Colors.white,
       gravity: isCenter ? ToastGravity.CENTER : ToastGravity.NONE,
       fontSize: 15

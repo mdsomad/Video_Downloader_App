@@ -1,9 +1,15 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/Instagram_reel/instagram_reel_model.dart';
+import 'package:video_downloader_application/Models/download_details_store_model/download_details_store_model.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
+import 'package:video_downloader_application/Provider/Settings/Settings_provider.dart';
+import 'package:video_downloader_application/Provider/download/Download_Dio_provider.dart';
+import 'package:video_downloader_application/Provider/main_home_page_provider.dart/MainHomePage_Provider.dart';
 import 'package:video_downloader_application/Screens/download/Download_Dio_Page.dart';
 import 'package:video_downloader_application/Screens/home/Instgaram_Ui_Widgets/Instagram_Video_Thumbnail_Widget.dart';
 import 'package:video_downloader_application/Screens/home/YouTube_UI_Widgets/video_thumbnail.dart';
@@ -106,8 +112,63 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
               style:TextStyle(color:AppColor.white)),
 
                TextButton(onPressed: (){
-              // Navigator.push(context, MaterialPageRoute(builder: ((context) => DownloadPage2(filterVideosList:filterVideosList![index],videoList:videoList,))));
-                provider.downloadFile(videoList.data!.response.video.contentUrl.toString(),videoList.data!.response.video.name.toString(),videoList.data!.response.video.width.toString(),false,context);
+
+
+
+
+                var settingsProvider = Provider.of<SettingsProvider>(context,listen:false);
+
+                    
+                    if(settingsProvider.downloading == true){
+                       provider.downloadFile(videoList.data!.response.video.contentUrl.toString(),videoList.data!.response.video.name.toString(),videoList.data!.response.video.width.toString(),false,context);
+                    }else{
+
+                    var downloadProvider = Provider.of<DownloadProvider>(context,listen:false);
+                     
+                    DownloadDetailsStoreModel downloadDetailsStoreModel = DownloadDetailsStoreModel(
+
+                       videourl: videoList.data!.response.video.contentUrl.toString(),
+
+                       title:videoList.data!.response.video.name.toString(),
+
+                       thumbnails: videoList.data!.response.video.thumbnailUrl.toString(), 
+
+                       videoquality:videoList.data!.response.video.width.toString(),
+
+                       type_Of_File: 'mp4',
+
+                      );
+
+
+
+
+                    if(downloadProvider.videoSaveList.isNotEmpty){
+                           if(kDebugMode){
+                             print("List isNotEmpty");
+                           }
+
+                          downloadProvider.videoSaveList.clear();
+                          downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
+                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(url: videoList.data!.response.video.contentUrl.toString(),title: videoList.data!.response.video.name.toString() ,quality:  videoList.data!.response.video.width.toString(),type_Of_File: 'mp4');
+                          Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
+                    }else{
+                           
+                        if(kDebugMode){
+                             print("List isEmpty");
+                         }
+                         downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
+                         Provider.of<DownloadProvider>(context,listen:false).startDownloading(url: videoList.data!.response.video.contentUrl.toString(),title: videoList.data!.response.video.name.toString() ,quality:  videoList.data!.response.video.width.toString(),type_Of_File: 'mp4');
+                         Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
+                    }
+                         
+                      print(downloadProvider.videoSaveList[0].videoquality);
+                  
+
+                    }
+                
+                
+                
+                // !provider.downloadFile(videoList.data!.response.video.contentUrl.toString(),videoList.data!.response.video.name.toString(),videoList.data!.response.video.width.toString(),false,context);
                 
               }, 
               style: ButtonStyle(overlayColor:

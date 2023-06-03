@@ -13,12 +13,14 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/download_details_store_model/download_details_store_model.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
+import 'package:video_downloader_application/Utils/Utils.dart';
 
 class DownloadProvider with ChangeNotifier{
 
@@ -73,7 +75,7 @@ downoadSpeed(recv_Byts){
           prev = speed;
           speedShow = speed;
           notifyListeners();
-          print(formatBytes(speedShow,0));
+          print(formatBytes(prev,0));
        }});
    }
   
@@ -87,9 +89,9 @@ downoadSpeed(recv_Byts){
   Dio dio = Dio();
   
 
-  Future<void> startDownloading(String url,String title,String quality,BuildContext context) async {
+  Future<void> startDownloading({required String url,required String title,required String quality,required String type_Of_File}) async {
    
-
+      NotificationService notificationService = NotificationService();
 
 
      final status = await Permission.storage.request();
@@ -105,7 +107,7 @@ downoadSpeed(recv_Byts){
      
 
 
-     fileName = "$title(${quality}).mp4";
+     fileName = "$title(${quality}).$type_Of_File";
     
       filePath = await _getFilePath1(fileName);
 
@@ -113,14 +115,42 @@ downoadSpeed(recv_Byts){
     
     progress = 0;
 
-    await dio.download(
+    
+    //!  dio
+    //  .download(
+    //     url,
+    //     filePathAndName,
+    //     onReceiveProgress: (count, total) {
+       
+    //       progressStream.add(count / total);
+    //     },
+    //   ).asStream()
+    //     .listen((event) {
+       
+    //   }).onDone(() {
+    //     // Fluttertoast.showToast(msg: "Video downloaded");
+       
+    //   });
+
+
+    
+
+     dio.download(
       url.toString(),
       filePath,
-      onReceiveProgress:(recivedBytes, totalBytes) {
-         //! downoadSpeed(recivedBytes);
-          progress = recivedBytes / totalBytes;
+      onReceiveProgress:(recivedBytes, totalBytes)async  {
+            progress = recivedBytes / totalBytes;
+            if(kDebugMode){
+              print(progress);
+            }
+
+        //!  Future.delayed(const Duration(seconds: 1), () {
+        // !     downoadSpeed(recivedBytes);
+        //!      print('Yes Duration');
+        //!   });
+          
           notifyListeners();
-          print(progress);
+         
       },cancelToken:cancelToken,
       deleteOnError: true,
 
@@ -128,9 +158,29 @@ downoadSpeed(recv_Byts){
     ).then((_) {
        setDownloading(false);
        setFileExist(true) ;
+       notificationService.showNotification(title,filePath);
       // Navigator.pop(context);
     }).onError((error, stackTrace) {
+
+       if(kDebugMode){
+
+       
+         print('Downloading failed error: ' + error.toString());
+         print('Downloading failed stackTrace: ' + stackTrace.toString());
+       }
+
+      
+      if(error.toString() == 'DioError [request cancelled]: The request was cancelled.'){
+           Utils.toastMessage('Downloading cancelled', true,color: Colors.red);
+       }else{
+        
+           Utils.toastMessage('Downloading failed try again', true,color: Colors.red);
+       }
+
+        
+       
        setDownloading(false);
+       setFileExist(false);
     });
 
 
@@ -153,10 +203,10 @@ downoadSpeed(recv_Byts){
 
 
   Future<String> _getFilePath1(String filename) async {
-    final dir = await getExternalStorageDirectory();
-    // final dir = Directory('/storage/emulated/0/Download');
-    // return "${dir.path}/$filename";
-    return "${dir!.path}/$filename";
+    // final dir = await getExternalStorageDirectory();
+    final dir = Directory('/storage/emulated/0/Download');
+    return "${dir.path}/$filename";
+    // return "${dir!.path}/$filename";
   }
   
 
@@ -202,4 +252,109 @@ setVideoSaveList(DownloadDetailsStoreModel videoSaveModel){
   
   
     
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class NotificationService {
+
+
+
+
+  //* Hanle displaying of notifications.
+  static final NotificationService _notificationService = NotificationService._internal();
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final AndroidInitializationSettings _androidInitializationSettings = const AndroidInitializationSettings('@mipmap/ic_launcher');
+  DarwinInitializationSettings iosSettings = const DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestCriticalPermission: true,
+    requestSoundPermission: true
+
+  );
+
+  factory NotificationService() {
+    return _notificationService;
+  }
+
+  NotificationService._internal() {
+    init();
+  }
+
+
+
+  void init() async {
+    final InitializationSettings initializationSettings = InitializationSettings(
+        android: _androidInitializationSettings,
+        iOS: iosSettings
+    );
+    await _flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (response) {
+         OpenFile.open(response.payload.toString());
+         if(kDebugMode){
+           print('background app Notification Click Then Open ${response.payload.toString()}');
+         }
+    }
+    );
+  }
+
+
+
+//TODO: Create showNotification function
+void showNotification(String videoTitle,String videoPath)async{
+    
+
+    AndroidNotificationChannel channel = AndroidNotificationChannel(
+       Random.secure().nextInt(100000).toString(),
+      "High importance Notification",
+      importance: Importance.max
+   );
+
+
+    AndroidNotificationDetails androidDetails = new AndroidNotificationDetails(
+       channel.id.toString() ,
+       channel.name.toString(),
+       channelDescription: 'Successfully download',
+       priority: Priority.max,
+       importance: Importance.max,
+       playSound:true
+    );
+
+    DarwinNotificationDetails iosDetails = new DarwinNotificationDetails(
+         presentAlert: true,
+         presentBadge: true,
+         presentSound: true
+    );
+
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+
+  //* Notifications Show Karne Ka pahla Tarika Yha hai
+   await _flutterLocalNotificationsPlugin.show(0,videoTitle,"Complete",
+     notificationDetails,
+     payload: videoPath
+    );
+
+
+}
+
+
+
+
 }

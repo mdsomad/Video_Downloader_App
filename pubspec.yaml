@@ -49,6 +49,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   receive_sharing_intent: ^1.4.5
   flutter_insta: any
+  flutter_local_notifications: ^14.1.1
   
 
 dev_dependencies:

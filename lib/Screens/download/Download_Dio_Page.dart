@@ -60,13 +60,13 @@ class _DownloadDioPageState extends State<DownloadDioPage> {
         return provider.videoSaveList.isNotEmpty ? Center(
           child: Column(
             children: [
-              VideoTextWidget(),
+              VideoTextWidget(title:provider.videoSaveList[0].type_Of_File.toString(),),
 
               VideoDownloadDisplayWidget(thumbnails: provider.videoSaveList[0].thumbnails.toString(), title:provider.videoSaveList[0].title.toString(), press: () { 
 
                  provider.fileExist && provider.downloading == false 
                  ? provider.openfile()
-                 : provider.startDownloading(provider.videoSaveList[0].videourl.toString(),provider.videoSaveList[0].title.toString(),provider.videoSaveList[0].videoquality.toString(),context);
+                 : provider.startDownloading(url:provider.videoSaveList[0].videourl.toString(),title:  provider.videoSaveList[0].title.toString(),quality:  provider.videoSaveList[0].videoquality.toString(),type_Of_File: provider.videoSaveList[0].type_Of_File.toString(),);
                 
                },),
             

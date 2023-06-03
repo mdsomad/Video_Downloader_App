@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:video_downloader_application/Provider/download/DownloadProvider.dart';
 import 'package:video_downloader_application/Provider/download/FlutterDownloader_provider.dart';
 import 'package:video_downloader_application/Provider/download/Download_Dio_provider.dart';
 import 'package:video_downloader_application/Provider/home/home_provider.dart';
@@ -51,6 +52,9 @@ class MyApp extends StatelessWidget {
 
              ChangeNotifierProvider<SettingsProvider>(
               create:(context) => SettingsProvider()
+            ),
+             ChangeNotifierProvider<DownloadProviderPress>(
+              create:(context) => DownloadProviderPress()
             ),
             
     ],

@@ -31,10 +31,12 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
         builder: (context, provider, child) {
     
     return Container( 
-    height: 100,
+    height: MediaQuery.of(context).size.height *.13,
     width: MediaQuery.of(context).size.width,
     color: Colors.grey,
     child: Row(
+      //  shrinkWrap: true,
+      // scrollDirection: Axis.horizontal,
       children: [
         Stack(
           children: [
@@ -46,7 +48,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
               },
               child: Container(
                 height: MediaQuery.of(context).size.height,
-                width: 120,
+                width: MediaQuery.of(context).size.width *.31,
                 // color: Color(0xff4F4F4F),
                 child: Image.network(
                   thumbnails,
@@ -54,7 +56,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                 ),
               ),
             ),
-
+    
            provider.downloading ? Positioned(
               top: 25,
               left: 45,
@@ -90,7 +92,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                               : title
                           
                           ,textAlign: TextAlign.start,style: TextStyle(color:Color(0xffFFFFFF),fontWeight: FontWeight.bold),),
-                        SizedBox(width: 20,),
+                        //  SizedBox(width: 20,),
                         // Text("${formatBytes(int.parse(filterVideosList.contentLength ?? "00"),0)}mb",textAlign: TextAlign.start,style: TextStyle(color:Color(0xffFFFFFF),fontWeight: FontWeight.bold),),
                       ],
                     ),
@@ -101,24 +103,17 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                         Text(""
                           //formatBytes(provider.prev,0)
                          ,textAlign: TextAlign.start,style: TextStyle(color:Color(0xff00C950),fontWeight: FontWeight.bold),),
-                        SizedBox(width: 140),
+                         SizedBox(width: MediaQuery.of(context).size.width *.4,),
                         Text("${(provider.progress * 100).toInt().toString()} %",textAlign: TextAlign.start,style: TextStyle(color:Color(0xffFFFFFF),fontWeight: FontWeight.bold),),
                       ],
                     ),
         
-                   
-        
-                    
+            
                   ],
                 ),
-                 Padding(
-                   padding: const EdgeInsets.only(left:0),
-                   child: IconButton(onPressed:press, icon:
-        
+                 IconButton(onPressed:press, icon:
                   provider.fileExist && provider.downloading == false ? Icon(Icons.save,color: Colors.green,) :
                   Icon(Icons.download,color:provider.downloading ? Colors.pink:Colors.white,)
-                   
-                   ),
                  )
               ],
             ),
@@ -126,7 +121,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
         )
       ],
     ),
-   );
+     );
 
         });
   }
@@ -141,7 +136,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
 Widget ProgressIndicator(progress,BuildContext context){
    return  Container(
             // margin: EdgeInsets.symmetric(vertical: 15),
-            width: 180,
+            width: MediaQuery.of(context).size.width *.5,
             height: 10,
             // color: Colors.yellow,
             child: ClipRRect(
