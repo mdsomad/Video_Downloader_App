@@ -38,8 +38,8 @@ class HomeRepository {
   Future<InstagramReelModel> instagramApi(String PassVideoUrl) async {
     try {
       Map urlData = {'url': PassVideoUrl.toString().trim()};
-       dynamic response = await _apiServices.getPostApiRespons(AppUrl.instagramReelApi,urlData);
-     // dynamic response = await _apiServices.getPostApiRespons(AppUrl.localhostInstagramReelApi, urlData);
+      // dynamic response = await _apiServices.getPostApiRespons(AppUrl.instagramReelApi,urlData);
+     dynamic response = await _apiServices.getPostApiRespons(AppUrl.localhostInstagramReelApi, urlData);
       return InstagramReelModel.fromJson(response);
     } catch (e) {
       throw e;

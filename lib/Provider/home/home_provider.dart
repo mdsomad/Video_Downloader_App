@@ -312,18 +312,17 @@ ApiResponse<InstagramReelModel> instagramVideo = ApiResponse.isEmpty("Enter A Vi
   notifyListeners();
  }
 
-  downloadFile(String url,String videoTitle,String videoquality,bool isAudio, BuildContext context)async{
+  downloadFile(String url, String videoTitle, String videoquality, String type_Of_file,  BuildContext context)async{
     final status = await  Permission.storage.request();
 
     if(status.isGranted){
 
       try {
+
       final basrStorage = await getExternalStorageDirectory();
-      if(isAudio == true){
-          fileName = "$videoTitle($videoquality).mp3";
-      }else{
-          fileName = "$videoTitle($videoquality).mp4";
-      }  
+      
+      fileName = "$videoTitle($videoquality).$type_Of_file";
+        
       
      setDownloading(true);
     //  Utils.toastMessage("Downloading Started...",true);

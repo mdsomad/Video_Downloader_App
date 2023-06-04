@@ -7,12 +7,27 @@ import 'package:open_file_plus/open_file_plus.dart';
 class NotificationService {
 
 
+  factory NotificationService() {
+    return _notificationService;
+  }
+
+  NotificationService._internal() {
+    init();
+  }
+
+
+
 
 
   //* Hanle displaying of notifications.
   static final NotificationService _notificationService = NotificationService._internal();
+
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+
   final AndroidInitializationSettings _androidInitializationSettings = const AndroidInitializationSettings('@mipmap/ic_launcher');
+
+
   DarwinInitializationSettings iosSettings = const DarwinInitializationSettings(
     requestAlertPermission: true,
     requestBadgePermission: true,
@@ -21,13 +36,7 @@ class NotificationService {
 
   );
 
-  factory NotificationService() {
-    return _notificationService;
-  }
 
-  NotificationService._internal() {
-    init();
-  }
 
 
 
@@ -49,6 +58,10 @@ class NotificationService {
 
 
 
+
+
+
+
 //TODO: Create showNotification function
 void showNotification(String videoTitle,String videoPath)async{
     
@@ -60,7 +73,7 @@ void showNotification(String videoTitle,String videoPath)async{
    );
 
 
-    AndroidNotificationDetails androidDetails = new AndroidNotificationDetails(
+    AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
        channel.id.toString() ,
        channel.name.toString(),
        channelDescription: 'Successfully download',
@@ -69,7 +82,7 @@ void showNotification(String videoTitle,String videoPath)async{
        playSound:true
     );
 
-    DarwinNotificationDetails iosDetails = new DarwinNotificationDetails(
+    DarwinNotificationDetails iosDetails = const DarwinNotificationDetails(
          presentAlert: true,
          presentBadge: true,
          presentSound: true
@@ -90,6 +103,17 @@ void showNotification(String videoTitle,String videoPath)async{
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

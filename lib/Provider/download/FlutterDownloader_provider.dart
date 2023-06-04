@@ -35,7 +35,7 @@ CheckPermission _checkPermission = CheckPermission();
 
  String fileName = "";
 
-  downloadFile(String url,String videoTitle,String videoquality,bool isAudio, BuildContext context)async{
+  downloadFile(String url,String videoTitle, String videoquality, String type_Of_File, BuildContext context)async{
 
      final status = await Permission.storage.request();
 
@@ -44,14 +44,12 @@ CheckPermission _checkPermission = CheckPermission();
       try {
 
       // final basrStorage = await getExternalStorageDirectory();
-      final basrStorage = await _directoryPath.getFilePath();
       // final dir = Directory('/storage/emulated/0/Download');
+      final basrStorage = await _directoryPath.getFilePath();
       
-      if(isAudio == true){
-          fileName = "$videoTitle($videoquality).mp3";
-      }else{
-          fileName = "$videoTitle($videoquality).mp4";
-      }  
+
+      fileName = "$videoTitle($videoquality).$type_Of_File";
+  
       
      setDownloading(true);
      Utils.toastMessage("Downloading Start",true);

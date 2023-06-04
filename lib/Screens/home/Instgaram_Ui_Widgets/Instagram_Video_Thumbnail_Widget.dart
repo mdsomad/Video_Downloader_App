@@ -61,11 +61,6 @@ String numberFormat(int n) {
         Container(
         // height: 80,
         width: MediaQuery.of(context).size.width/2.2,
-
-        // color: Colors.pink,
-        // margin: EdgeInsets.only(top: 45,left: 20,bottom: 10,),
-        // padding: EdgeInsets.only(left: 15,),
-          // color: Colors.pink,
           child: ListView(
             shrinkWrap: true,
             // mainAxisAlignment: MainAxisAlignment.start,

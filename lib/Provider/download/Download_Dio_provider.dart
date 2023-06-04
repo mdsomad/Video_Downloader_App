@@ -92,7 +92,7 @@ downoadSpeed(recv_Byts){
   Dio dio = Dio();
   
 
-  Future<void> startDownloading({required String url,required String title,required String quality,required String type_Of_File}) async {
+  Future<void> startDownloading({required String url,required String title,required String quality,required String type_Of_File,required BuildContext context }) async {
       
 
   
@@ -105,8 +105,8 @@ downoadSpeed(recv_Byts){
      
 
       NotificationService notificationService = NotificationService();   //* <-- Create NotificationService Class object
-
-
+      final homePageProvider = Provider.of<HomePageProvider>(context,listen: false);
+   
      final status = await Permission.storage.request();
 
       if(status.isGranted){
@@ -114,13 +114,23 @@ downoadSpeed(recv_Byts){
        cancelToken = CancelToken();
 
 
+          //* Yha karne ka vajah hai ki Instagram video ka naam ke vajah se download Error Aata Hai
+          if(homePageProvider.checkVideoPlatformLink == 'instagram'){
+              final String newName = DateTime.now().microsecondsSinceEpoch.toString();
+              fileName = "$newName($quality).$type_Of_File";
+              print('Instagram Video fileName this -> $fileName');
+
+          }else{
+             fileName = "$title($quality).$type_Of_File";
+             print('YouTube Video fileName this -> $fileName');
+          }
 
     // ! final String date = DateTime.now().microsecondsSinceEpoch.toString();
     // ! fileName = "$date.mp4";
      
     
 
-     fileName = "$title(${quality}).mp4";
+     
     
       filePath = await _getFilePath1(fileName);
 
@@ -176,18 +186,15 @@ downoadSpeed(recv_Byts){
     }).onError((error, stackTrace) {
 
        if(kDebugMode){
-
-       
          print('Downloading failed error: ' + error.toString());
          print('Downloading failed stackTrace: ' + stackTrace.toString());
        }
 
       
       if(error.toString() == 'DioError [request cancelled]: The request was cancelled.'){
-           Utils.toastMessage('Downloading cancelled', true,color: Colors.red);
+            Utils.ftushBarErrorMessage('Downloading cancelled', context);
        }else{
-        
-           Utils.toastMessage('Downloading failed try again', true,color: Colors.red);
+           Utils.ftushBarErrorMessage('Downloading failed try again',context);
        }
 
         

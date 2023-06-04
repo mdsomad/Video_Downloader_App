@@ -66,7 +66,7 @@ class _DownloadDioPageState extends State<DownloadDioPage> {
 
                  provider.fileExist && provider.downloading == false 
                  ? provider.openfile()
-                 : provider.startDownloading(url:provider.videoSaveList[0].videourl.toString(),title:  provider.videoSaveList[0].title.toString(),quality:  provider.videoSaveList[0].videoquality.toString(),type_Of_File: provider.videoSaveList[0].type_Of_File.toString(),);
+                 : provider.startDownloading(url:provider.videoSaveList[0].videourl.toString(),title:  provider.videoSaveList[0].title.toString(),quality:  provider.videoSaveList[0].videoquality.toString(),type_Of_File: provider.videoSaveList[0].type_Of_File.toString(),context: context);
                 
                },),
             

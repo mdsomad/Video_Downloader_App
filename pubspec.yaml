@@ -50,6 +50,7 @@ dependencies:
   receive_sharing_intent: ^1.4.5
   flutter_insta: any
   flutter_local_notifications: ^14.1.1
+  app_settings: ^4.2.0
   
 
 dev_dependencies:

@@ -125,28 +125,30 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
 
                     
                     if(settingsProvider.downloading == true){
-                        provider.downloadFile(filterVideosList![index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),false,context);   
+                        provider.downloadFile(filterVideosList![index].url.toString(),videoList.data!.response!.title.toString(),filterVideosList[index].quality.toString(),'mp4',context);   
                     }else{
 
                     var downloadProvider = Provider.of<DownloadProvider>(context,listen:false);
                      
                     DownloadDetailsStoreModel downloadDetailsStoreModel = DownloadDetailsStoreModel(videourl: filterVideosList![index].url.toString(), title:videoList.data!.response!.title.toString(), thumbnails: videoList.data!.response!.thumbnails![0].url.toString(), videoquality:filterVideosList[index].quality,type_Of_File: 'mp4',);
 
+ 
 
-
-
+                    //* videoSaveList <-- Agar Deta Hai To yah chalega
                     if(downloadProvider.videoSaveList.isNotEmpty){
 
-                          print("isNotEmpty");
-
                           downloadProvider.videoSaveList.clear();
-                          downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
-                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:filterVideosList[index].url.toString(),title:  videoList.data!.response!.title.toString(),quality:  filterVideosList[index].quality.toString(),type_Of_File: 'mp4');
+
+                          downloadProvider.setVideoSaveList(downloadDetailsStoreModel);  //*  <-- Yah function videoSaveList mein data add karta hai
+
+                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:filterVideosList[index].url.toString(),title:  videoList.data!.response!.title.toString(),quality:  filterVideosList[index].quality.toString(),type_Of_File: 'mp4',context: context);
                           Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                     }else{
-                         print("isEmpty");
+                          
+                          //* videoSaveList <-- Agar data Nahin Hai To yah chalega
+
                          downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
-                         Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:filterVideosList[index].url.toString(),title:  videoList.data!.response!.title.toString(),quality:  filterVideosList[index].quality.toString(),type_Of_File: 'mp4');
+                         Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:filterVideosList[index].url.toString(),title:  videoList.data!.response!.title.toString(),quality:  filterVideosList[index].quality.toString(),type_Of_File: 'mp4',context: context);
                          Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                     }
                          
@@ -242,28 +244,34 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
 
                     
                     if(settingsProvider.downloading == true){
-                        provider.downloadFile(videoList.data!.response!.audios![index].url.toString(),videoList.data!.response!.title.toString(),videoList.data!.response!.audios![index].quality.toString(),true,context);
+                        provider.downloadFile(videoList.data!.response!.audios![index].url.toString(), videoList.data!.response!.title.toString(), 'audio', 'mp3',context);
                     }else{
 
                     var downloadProvider = Provider.of<DownloadProvider>(context,listen:false);
                      
-                    DownloadDetailsStoreModel downloadDetailsStoreModel = DownloadDetailsStoreModel(videourl: videoList.data!.response!.audios![index].url.toString(), title:videoList.data!.response!.title.toString(), thumbnails: videoList.data!.response!.thumbnails![0].url.toString(), videoquality:'audio',type_Of_File: 'mp3',);
+                    DownloadDetailsStoreModel downloadDetailsStoreModel = DownloadDetailsStoreModel(
+                      videourl: videoList.data!.response!.audios![index].url.toString(), 
+                      title:videoList.data!.response!.title.toString(),
+                      thumbnails: videoList.data!.response!.thumbnails![0].url.toString(), 
+                      videoquality:'audio',
+                      type_Of_File: 'mp3',
+                      );
 
 
 
-
+                    //* videoSaveList <-- Agar Data Hai To Yah chalega
                     if(downloadProvider.videoSaveList.isNotEmpty){
-
+                             
                           print("isNotEmpty");
 
                           downloadProvider.videoSaveList.clear();
                           downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
-                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:videoList.data!.response!.audios![index].url.toString(),title:videoList.data!.response!.title.toString(),quality:'audio',type_Of_File: 'mp3');
+                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:videoList.data!.response!.audios![index].url.toString(),title:videoList.data!.response!.title.toString(),quality:'audio',type_Of_File: 'mp3',context: context);
                           Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                     }else{
-                         print("isEmpty");
+                         //* videoSaveList <-- Agar data Nahin Hai To yah chalega
                          downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
-                         Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:videoList.data!.response!.audios![index].url.toString(),title: videoList.data!.response!.title.toString(),quality:'audio',type_Of_File:'mp3');
+                         Provider.of<DownloadProvider>(context,listen:false).startDownloading(url:videoList.data!.response!.audios![index].url.toString(),title: videoList.data!.response!.title.toString(),quality:'audio',type_Of_File:'mp3',context: context);
                          Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                     }
                          
