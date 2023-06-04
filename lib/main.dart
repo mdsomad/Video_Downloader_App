@@ -53,9 +53,9 @@ class MyApp extends StatelessWidget {
              ChangeNotifierProvider<SettingsProvider>(
               create:(context) => SettingsProvider()
             ),
-             ChangeNotifierProvider<DownloadProviderPress>(
-              create:(context) => DownloadProviderPress()
-            ),
+            //  ChangeNotifierProvider<DownloadProviderPress>(
+            //   create:(context) => DownloadProviderPress()
+            // ),
             
     ],
 

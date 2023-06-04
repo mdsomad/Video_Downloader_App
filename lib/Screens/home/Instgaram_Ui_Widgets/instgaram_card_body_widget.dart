@@ -114,6 +114,9 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                TextButton(onPressed: (){
 
 
+                 final String titleDate = DateTime.now().microsecondsSinceEpoch.toString();
+
+
 
 
                 var settingsProvider = Provider.of<SettingsProvider>(context,listen:false);
@@ -129,7 +132,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
 
                        videourl: videoList.data!.response.video.contentUrl.toString(),
 
-                       title:videoList.data!.response.video.name.toString(),
+                       title:titleDate,
 
                        thumbnails: videoList.data!.response.video.thumbnailUrl.toString(), 
 
@@ -149,7 +152,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
 
                           downloadProvider.videoSaveList.clear();
                           downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
-                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(url: videoList.data!.response.video.contentUrl.toString(),title: videoList.data!.response.video.name.toString() ,quality:  videoList.data!.response.video.width.toString(),type_Of_File: 'mp4');
+                          Provider.of<DownloadProvider>(context,listen:false).startDownloading(url: videoList.data!.response.video.contentUrl.toString(),title: titleDate ,quality:  videoList.data!.response.video.width.toString(),type_Of_File: 'mp4');
                           Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                     }else{
                            
@@ -157,7 +160,7 @@ String getFileSizeString({required int bytes, int decimals = 0}) {
                              print("List isEmpty");
                          }
                          downloadProvider.setVideoSaveList(downloadDetailsStoreModel);
-                         Provider.of<DownloadProvider>(context,listen:false).startDownloading(url: videoList.data!.response.video.contentUrl.toString(),title: videoList.data!.response.video.name.toString() ,quality:  videoList.data!.response.video.width.toString(),type_Of_File: 'mp4');
+                         Provider.of<DownloadProvider>(context,listen:false).startDownloading(url: videoList.data!.response.video.contentUrl.toString(),title:titleDate ,quality:  videoList.data!.response.video.width.toString(),type_Of_File: 'mp4');
                          Provider.of<MainHomePageProvider>(context,listen:false).setCurrentIndex(1);
                     }
                          

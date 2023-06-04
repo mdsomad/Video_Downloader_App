@@ -17,9 +17,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:video_downloader_application/Data/response/api_response.dart';
 import 'package:video_downloader_application/Models/download_details_store_model/download_details_store_model.dart';
 import 'package:video_downloader_application/Models/youtube_video/Video_Model.dart';
+import 'package:video_downloader_application/Provider/home/home_provider.dart';
+import 'package:video_downloader_application/Services/notification_service.dart';
 import 'package:video_downloader_application/Utils/Utils.dart';
 
 class DownloadProvider with ChangeNotifier{
@@ -90,8 +93,18 @@ downoadSpeed(recv_Byts){
   
 
   Future<void> startDownloading({required String url,required String title,required String quality,required String type_Of_File}) async {
-   
-      NotificationService notificationService = NotificationService();
+      
+
+  
+     
+      
+      //! final myString = 'abc=';
+      //! final withoutEquals = myString.replaceAll(RegExp('='), ''); 
+      //! print(withoutEquals);
+      
+     
+
+      NotificationService notificationService = NotificationService();   //* <-- Create NotificationService Class object
 
 
      final status = await Permission.storage.request();
@@ -102,12 +115,12 @@ downoadSpeed(recv_Byts){
 
 
 
-    //  final String date = DateTime.now().microsecondsSinceEpoch.toString();
-    //  fileName = "$date.mp4";
+    // ! final String date = DateTime.now().microsecondsSinceEpoch.toString();
+    // ! fileName = "$date.mp4";
      
+    
 
-
-     fileName = "$title(${quality}).$type_Of_File";
+     fileName = "$title(${quality}).mp4";
     
       filePath = await _getFilePath1(fileName);
 
@@ -264,97 +277,3 @@ setVideoSaveList(DownloadDetailsStoreModel videoSaveModel){
 
 
 
-
-
-
-class NotificationService {
-
-
-
-
-  //* Hanle displaying of notifications.
-  static final NotificationService _notificationService = NotificationService._internal();
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  final AndroidInitializationSettings _androidInitializationSettings = const AndroidInitializationSettings('@mipmap/ic_launcher');
-  DarwinInitializationSettings iosSettings = const DarwinInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestCriticalPermission: true,
-    requestSoundPermission: true
-
-  );
-
-  factory NotificationService() {
-    return _notificationService;
-  }
-
-  NotificationService._internal() {
-    init();
-  }
-
-
-
-  void init() async {
-    final InitializationSettings initializationSettings = InitializationSettings(
-        android: _androidInitializationSettings,
-        iOS: iosSettings
-    );
-    await _flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (response) {
-         OpenFile.open(response.payload.toString());
-         if(kDebugMode){
-           print('background app Notification Click Then Open ${response.payload.toString()}');
-         }
-    }
-    );
-  }
-
-
-
-//TODO: Create showNotification function
-void showNotification(String videoTitle,String videoPath)async{
-    
-
-    AndroidNotificationChannel channel = AndroidNotificationChannel(
-       Random.secure().nextInt(100000).toString(),
-      "High importance Notification",
-      importance: Importance.max
-   );
-
-
-    AndroidNotificationDetails androidDetails = new AndroidNotificationDetails(
-       channel.id.toString() ,
-       channel.name.toString(),
-       channelDescription: 'Successfully download',
-       priority: Priority.max,
-       importance: Importance.max,
-       playSound:true
-    );
-
-    DarwinNotificationDetails iosDetails = new DarwinNotificationDetails(
-         presentAlert: true,
-         presentBadge: true,
-         presentSound: true
-    );
-
-
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-
-  //* Notifications Show Karne Ka pahla Tarika Yha hai
-   await _flutterLocalNotificationsPlugin.show(0,videoTitle,"Complete",
-     notificationDetails,
-     payload: videoPath
-    );
-
-
-}
-
-
-
-
-}

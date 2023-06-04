@@ -27,8 +27,8 @@ class _PlayListPageState extends State<PlayListPage> {
             children: [
               Text("PlayList Screen",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color:AppColor.white),),
               TextButton(onPressed: (){
-                var settingsProvider = Provider.of<DownloadProviderPress>(context,listen:false);
-                settingsProvider.download(0);
+                // var settingsProvider = Provider.of<DownloadProviderPress>(context,listen:false);
+                // settingsProvider.download(0);
               }, child:Text("Click"))
             ],
           ),
