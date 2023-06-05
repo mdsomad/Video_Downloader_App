@@ -44,7 +44,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
             InkWell(
               onTap: (){
                   provider.fileExist &&  provider.downloading == false ?  provider.openfile():
-                  provider.cancelDownlad();
+                  provider.cancelDownlad(context);
               },
               child: Container(
                 height: MediaQuery.of(context).size.height,
@@ -63,7 +63,7 @@ class VideoDownloadDisplayWidget extends StatelessWidget {
                 child:InkWell(
                    onTap: (){
                     provider.fileExist &&  provider.downloading == false ?  provider.openfile():
-                    provider.cancelDownlad();
+                    provider.cancelDownlad(context);
               },
                   child: Icon(Icons.close,size: 40,color: Colors.red,))
                 

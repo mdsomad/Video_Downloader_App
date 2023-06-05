@@ -114,51 +114,50 @@ downoadSpeed(recv_Byts){
        cancelToken = CancelToken();
 
 
-          //* Yha karne ka vajah hai ki Instagram video ka naam ke vajah se download Error Aata Hai
-          if(homePageProvider.checkVideoPlatformLink == 'instagram'){
-              final String newName = DateTime.now().microsecondsSinceEpoch.toString();
-              fileName = "$newName($quality).$type_Of_File";
-              print('Instagram Video fileName this -> $fileName');
+      //* Yha karne ka vajah hai ki Instagram video ka naam ke vajah se download Error Aata Hai
+      if(homePageProvider.checkVideoPlatformLink == 'instagram'){
+          final String newName = DateTime.now().microsecondsSinceEpoch.toString();
+          fileName = "$newName($quality).$type_Of_File";
+          print('Instagram Video fileName this -> $fileName');
 
-          }else{
-             fileName = "$title($quality).$type_Of_File";
-             print('YouTube Video fileName this -> $fileName');
-          }
-
-    // ! final String date = DateTime.now().microsecondsSinceEpoch.toString();
-    // ! fileName = "$date.mp4";
+      }else{
+          fileName = "$title($quality).$type_Of_File";
+          print('YouTube Video fileName this -> $fileName');
+      }
      
     
 
      
     
-      filePath = await _getFilePath1(fileName);
+     filePath = await _getFilePath1(fileName);
 
-    setDownloading(true);
+     setDownloading(true);
     
-    progress = 0;
+      progress = 0;
+
+
+
+      //! Filhal Abhi yah use nahin kar rahe hain
+      //  dio
+      //  .download(
+      //     url,
+      //     filePathAndName,
+      //     onReceiveProgress: (count, total) {
+        
+      //       progressStream.add(count / total);
+      //     },
+      //   ).asStream()
+      //     .listen((event) {
+        
+      //   }).onDone(() {
+      //     // Fluttertoast.showToast(msg: "Video downloaded");
+        
+      //   });
+
 
     
-    //!  dio
-    //  .download(
-    //     url,
-    //     filePathAndName,
-    //     onReceiveProgress: (count, total) {
-       
-    //       progressStream.add(count / total);
-    //     },
-    //   ).asStream()
-    //     .listen((event) {
-       
-    //   }).onDone(() {
-    //     // Fluttertoast.showToast(msg: "Video downloaded");
-       
-    //   });
 
-
-    
-
-     dio.download(
+    await dio.download(
       url.toString(),
       filePath,
       onReceiveProgress:(recivedBytes, totalBytes)async  {
@@ -179,10 +178,12 @@ downoadSpeed(recv_Byts){
 
       
     ).then((_) {
+
        setDownloading(false);
        setFileExist(true) ;
-       notificationService.showNotification(title,filePath);
-      // Navigator.pop(context);
+
+       notificationService.showNotification(title,filePath);  //* <-- showNotification Function called
+
     }).onError((error, stackTrace) {
 
        if(kDebugMode){
@@ -191,16 +192,13 @@ downoadSpeed(recv_Byts){
        }
 
       
-      if(error.toString() == 'DioError [request cancelled]: The request was cancelled.'){
-            Utils.ftushBarErrorMessage('Downloading cancelled', context);
-       }else{
+      if(error.toString() != 'DioError [request cancelled]: The request was cancelled.'){
            Utils.ftushBarErrorMessage('Downloading failed try again',context);
        }
 
-        
-       
        setDownloading(false);
        setFileExist(false);
+
     });
 
 
@@ -223,24 +221,31 @@ downoadSpeed(recv_Byts){
 
 
   Future<String> _getFilePath1(String filename) async {
-    // final dir = await getExternalStorageDirectory();
+    //! filhal Yah Dio download Mein Kaam nahin karta hai
+    //! final dir = await getExternalStorageDirectory();
+    //! return "${dir!.path}/$filename";
+
     final dir = Directory('/storage/emulated/0/Download');
     return "${dir.path}/$filename";
-    // return "${dir!.path}/$filename";
+
   }
   
 
 
 
-  cancelDownlad(){
+
+  //TODO Create cancelDownlad Function
+  cancelDownlad(BuildContext context) {
      cancelToken.cancel();
      setFileExist(false);
      setDownloading(false);
+     Utils.ftushBarErrorMessage('Downloading cancelled', context);
   }
 
 
 
 
+ //TODO Create checkFileExit Function
   checkFileExit()async{
     final storagedir = await _getFilePath1(fileName);
     bool fileExistCheck = await File(storagedir).exists();
@@ -251,6 +256,7 @@ downoadSpeed(recv_Byts){
   
 
 
+ //TODO Create openfile Function
   openfile(){
     OpenFile.open(filePath);
   }
